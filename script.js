@@ -284,7 +284,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('navEducation').innerText = t.education;
     document.getElementById('navExperience').innerText = t.experience;
     document.getElementById('navProjects').innerText = t.projects;
-    document.getElementById('navSkills').innerText = t.skills;
     if(document.getElementById('navContact')) {
       document.getElementById('navContact').innerText = t.contact;
     }
@@ -564,4 +563,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initial render
   renderContent();
+
+  // Add smooth scroll functionality for the "Get Started" button
+  document.querySelector('a[href="#education"]').addEventListener("click", function(e) {
+    e.preventDefault();
+    document.querySelector("#education").scrollIntoView({ behavior: "smooth" });
+  });
 });
