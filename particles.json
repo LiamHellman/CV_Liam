@@ -1,53 +1,52 @@
 {
-    "particles": {
-      "number": {
-        "value": 80
-      },
-      "color": {
-        "value": "purple"
-      },
-      "shape": {
-        "type": "circle"
-      },
-      "opacity": {
-        "value": 0.5
-      },
-      "size": {
-        "value": 3
-      },
-      "line_linked": {
+  "particles": {
+    "number": {
+      "value": 80
+    },
+    "color": {
+      "value": "#800080"
+    },
+    "shape": {
+      "type": "circle"
+    },
+    "opacity": {
+      "value": 0.5
+    },
+    "size": {
+      "value": 3
+    },
+    "line_linked": {
+      "enable": true,
+      "distance": 150,
+      "color": "#800080",
+      "opacity": 0.4,
+      "width": 1
+    },
+    "move": {
+      "enable": true,
+      "speed": 2
+    }
+  },
+  "interactivity": {
+    "detect_on": "canvas",
+    "events": {
+      "onhover": {
         "enable": true,
-        "distance": 150,
-        "color": "purple",
-        "opacity": 0.4,
-        "width": 1
+        "mode": "repulse"
       },
-      "move": {
+      "onclick": {
         "enable": true,
-        "speed": 2
+        "mode": "push"
       }
     },
-    "interactivity": {
-      "detect_on": "canvas",
-      "events": {
-        "onhover": {
-          "enable": true,
-          "mode": "repulse"
-        },
-        "onclick": {
-          "enable": true,
-          "mode": "push"
-        }
+    "modes": {
+      "repulse": {
+        "distance": 100
       },
-      "modes": {
-        "repulse": {
-          "distance": 100
-        },
-        "push": {
-          "particles_nb": 4
-        }
+      "push": {
+        "particles_nb": 4
       }
-    },
-    "retina_detect": true
-  }
-  
+    }
+  },
+  "retina_detect": true
+}

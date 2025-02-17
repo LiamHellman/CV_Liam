@@ -564,9 +564,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initial render
   renderContent();
 
-  // Add smooth scroll functionality for the "Get Started" button
-  document.querySelector('a[href="#education"]').addEventListener("click", function(e) {
+  // Smooth scroll functionality for the "Get Started" button
+  document.getElementById("getStarted").addEventListener("click", function(e) {
     e.preventDefault();
-    document.querySelector("#education").scrollIntoView({ behavior: "smooth" });
+    document.getElementById("education").scrollIntoView({ behavior: "smooth" });
   });
 });
