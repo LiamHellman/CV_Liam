@@ -1,4 +1,4 @@
-// script.js
+/* script.js */
 
 let language = 'en';
 let isMenuOpen = false;
@@ -10,6 +10,7 @@ const translations = {
     experience: "Experience",
     projects: "Projects",
     skills: "Skills & Interests",
+    contact: "Contact",
     qualities: "Qualities",
     languages: "Languages",
     interests: "Interests",
@@ -26,6 +27,7 @@ const translations = {
     experience: "Expérience",
     projects: "Projets",
     skills: "Compétences & Intérêts",
+    contact: "Contact",
     qualities: "Qualités",
     languages: "Langues",
     interests: "Intérêts",
@@ -284,6 +286,9 @@ function renderContent() {
   document.getElementById('navExperience').innerText = t.experience;
   document.getElementById('navProjects').innerText = t.projects;
   document.getElementById('navSkills').innerText = t.skills;
+  if(document.getElementById('navContact')) {
+    document.getElementById('navContact').innerText = t.contact;
+  }
 
   // Navigation (Mobile)
   document.getElementById('mobileNavAbout').innerText = t.about;
@@ -291,6 +296,9 @@ function renderContent() {
   document.getElementById('mobileNavExperience').innerText = t.experience;
   document.getElementById('mobileNavProjects').innerText = t.projects;
   document.getElementById('mobileNavSkills').innerText = t.skills;
+  if(document.getElementById('mobileNavContact')) {
+    document.getElementById('mobileNavContact').innerText = t.contact;
+  }
 
   // Language Toggle Buttons
   const langButtonText = language === 'en' ? 'FR' : 'EN';
@@ -299,6 +307,8 @@ function renderContent() {
 
   // Hero Section
   document.getElementById('heroName').innerText = personalInfo.name;
+  // Trigger the typewriter effect after text is set
+  document.getElementById('heroName').classList.add('typewriter');
   document.getElementById('heroTitle').innerText = personalInfo.title;
   document.getElementById('heroLocation').innerText = personalInfo.location;
 
@@ -318,7 +328,7 @@ function renderContent() {
   qualitiesContainer.innerHTML = "";
   skills.qualities.forEach(quality => {
     const span = document.createElement("span");
-    span.className = "px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium";
+    span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
     span.innerText = quality;
     qualitiesContainer.appendChild(span);
   });
@@ -328,7 +338,7 @@ function renderContent() {
   languagesContainer.innerHTML = "";
   skills.languages.forEach(lang => {
     const span = document.createElement("span");
-    span.className = "px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium";
+    span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
     span.innerText = lang;
     languagesContainer.appendChild(span);
   });
@@ -338,7 +348,7 @@ function renderContent() {
   interestsContainer.innerHTML = "";
   skills.interests.forEach(interest => {
     const span = document.createElement("span");
-    span.className = "px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium";
+    span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
     span.innerText = interest;
     interestsContainer.appendChild(span);
   });
@@ -348,7 +358,7 @@ function renderContent() {
   programmingContainer.innerHTML = "";
   skills.technical.programming.forEach(lang => {
     const span = document.createElement("span");
-    span.className = "px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium";
+    span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
     span.innerText = lang;
     programmingContainer.appendChild(span);
   });
@@ -358,7 +368,7 @@ function renderContent() {
   frameworksContainer.innerHTML = "";
   skills.technical.frameworks.forEach(framework => {
     const span = document.createElement("span");
-    span.className = "px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-sm font-medium";
+    span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
     span.innerText = framework;
     frameworksContainer.appendChild(span);
   });
@@ -368,7 +378,7 @@ function renderContent() {
   toolsContainer.innerHTML = "";
   skills.technical.tools.forEach(tool => {
     const span = document.createElement("span");
-    span.className = "px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium";
+    span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
     span.innerText = tool;
     toolsContainer.appendChild(span);
   });
@@ -378,7 +388,7 @@ function renderContent() {
   databasesContainer.innerHTML = "";
   skills.technical.databases.forEach(db => {
     const span = document.createElement("span");
-    span.className = "px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium";
+    span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
     span.innerText = db;
     databasesContainer.appendChild(span);
   });
@@ -389,7 +399,7 @@ function renderContent() {
   projectsContainer.innerHTML = "";
   projects.forEach(project => {
     const projectDiv = document.createElement("div");
-    projectDiv.className = "bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300";
+    projectDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300";
     
     const innerDiv = document.createElement("div");
     innerDiv.className = "p-6";
@@ -397,23 +407,23 @@ function renderContent() {
     const headerDiv = document.createElement("div");
     headerDiv.className = "flex justify-between items-start";
     const h3 = document.createElement("h3");
-    h3.className = "text-xl font-bold text-gray-900";
+    h3.className = "text-xl font-bold text-green-400";
     h3.innerText = project.title;
-    const span = document.createElement("span");
-    span.className = "text-sm text-gray-500";
-    span.innerText = project.date;
+    const dateSpan = document.createElement("span");
+    dateSpan.className = "text-sm text-green-300";
+    dateSpan.innerText = project.date;
     headerDiv.appendChild(h3);
-    headerDiv.appendChild(span);
+    headerDiv.appendChild(dateSpan);
     
     const descriptionP = document.createElement("p");
-    descriptionP.className = "mt-2 text-gray-600";
+    descriptionP.className = "mt-2 text-green-300";
     descriptionP.innerText = project.description;
     
     const techDiv = document.createElement("div");
     techDiv.className = "mt-4 flex flex-wrap gap-2";
     project.technologies.forEach(tech => {
       const techSpan = document.createElement("span");
-      techSpan.className = "px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm";
+      techSpan.className = "px-2 py-1 bg-green-900 text-green-400 rounded text-sm";
       techSpan.innerText = tech;
       techDiv.appendChild(techSpan);
     });
@@ -422,7 +432,7 @@ function renderContent() {
     pointsUl.className = "mt-4 space-y-2";
     project.points.forEach(point => {
       const li = document.createElement("li");
-      li.className = "text-gray-600 text-sm";
+      li.className = "text-green-300 text-sm";
       li.innerText = "• " + point;
       pointsUl.appendChild(li);
     });
@@ -441,21 +451,21 @@ function renderContent() {
   experienceContainer.innerHTML = "";
   experience.forEach(exp => {
     const expDiv = document.createElement("div");
-    expDiv.className = "bg-gray-50 shadow rounded-lg p-6";
+    expDiv.className = "bg-gray-800 shadow rounded-lg p-6";
     
     const headerDiv = document.createElement("div");
     headerDiv.className = "flex justify-between items-start";
     const innerDiv = document.createElement("div");
     const h3 = document.createElement("h3");
-    h3.className = "text-xl font-bold text-gray-900";
+    h3.className = "text-xl font-bold text-green-400";
     h3.innerText = exp.title;
     const p = document.createElement("p");
-    p.className = "text-gray-600";
+    p.className = "text-green-300";
     p.innerText = exp.company;
     innerDiv.appendChild(h3);
     innerDiv.appendChild(p);
     const periodSpan = document.createElement("span");
-    periodSpan.className = "text-sm text-gray-500";
+    periodSpan.className = "text-sm text-green-300";
     periodSpan.innerText = exp.period;
     headerDiv.appendChild(innerDiv);
     headerDiv.appendChild(periodSpan);
@@ -464,7 +474,7 @@ function renderContent() {
     ul.className = "mt-4 space-y-2";
     exp.responsibilities.forEach(resp => {
       const li = document.createElement("li");
-      li.className = "text-gray-600";
+      li.className = "text-green-300";
       li.innerText = "• " + resp;
       ul.appendChild(li);
     });
@@ -480,21 +490,21 @@ function renderContent() {
   educationContainer.innerHTML = "";
   education.forEach(edu => {
     const eduDiv = document.createElement("div");
-    eduDiv.className = "bg-white shadow rounded-lg p-6";
+    eduDiv.className = "bg-gray-800 shadow rounded-lg p-6";
     
     const headerDiv = document.createElement("div");
     headerDiv.className = "flex justify-between items-start";
     const innerDiv = document.createElement("div");
     const h3 = document.createElement("h3");
-    h3.className = "text-xl font-bold text-gray-900";
+    h3.className = "text-xl font-bold text-green-400";
     h3.innerText = edu.degree;
     const p = document.createElement("p");
-    p.className = "text-gray-600";
+    p.className = "text-green-300";
     p.innerText = edu.institution;
     innerDiv.appendChild(h3);
     innerDiv.appendChild(p);
     const periodSpan = document.createElement("span");
-    periodSpan.className = "text-sm text-gray-500";
+    periodSpan.className = "text-sm text-green-300";
     periodSpan.innerText = edu.period;
     headerDiv.appendChild(innerDiv);
     headerDiv.appendChild(periodSpan);
@@ -503,7 +513,7 @@ function renderContent() {
     ul.className = "mt-4 space-y-2";
     edu.details.forEach(detail => {
       const li = document.createElement("li");
-      li.className = "text-gray-600";
+      li.className = "text-green-300";
       li.innerText = "• " + detail;
       ul.appendChild(li);
     });
@@ -539,6 +549,19 @@ document.getElementById("langToggleMobile").addEventListener("click", function (
 
 // Set initial menu icon
 document.getElementById("menuIcon").innerText = "☰";
+
+// Initialize Particles.js
+particlesJS.load('particles-js', 'particles.json', function() {
+  console.log('Particles.js config loaded');
+});
+
+// Optionally add additional Anime.js animations
+anime({
+  targets: 'nav a, nav button',
+  translateY: [-10, 0],
+  opacity: [0, 1],
+  delay: anime.stagger(100)
+});
 
 // Initial render
 renderContent();
