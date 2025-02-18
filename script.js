@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
       expContainer.appendChild(expDiv);
     });
 
-    // Render Projects Section (already using card style)
+    // Render Projects Section (card style)
     const projContainer = document.getElementById('projectsContainer');
     projContainer.innerHTML = "";
     content[language].projects.forEach(proj => {
@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
       projContainer.appendChild(projDiv);
     });
 
-    // Render Skills & Interests Section (wrap entire skills content in a card)
+    // Render Skills & Interests Section (wrapped in a card)
     const skillsSectionContainer = document.getElementById("skillsContent");
     skillsSectionContainer.innerHTML = "";
     const skillsCard = document.createElement("div");

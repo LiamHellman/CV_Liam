@@ -11,7 +11,7 @@
 }
 .fade-in-up {
   animation: fadeInUp 1s ease forwards;
-  /* Removed explicit opacity: 0 so content stays visible */
+  /* No explicit opacity: 0 to ensure content remains visible */
 }
 
 /* Delays for each section */
@@ -21,7 +21,7 @@
 .delay-4 { animation-delay: 2s; }
 .delay-5 { animation-delay: 2.5s; }
 
-/* Default nav styles (top nav) */
+/* Default top navigation styles */
 nav {
   transition: all 0.3s ease;
   height: 4rem;
@@ -50,7 +50,7 @@ nav.sidebar button {
   padding-left: 1rem;
 }
 
-/* In non-sidebar mode (top nav), show extra items on desktop */
+/* In non-sidebar mode (top nav), extra items are visible */
 nav:not(.sidebar) .hide-on-shrink {
   display: inline-block;
 }
