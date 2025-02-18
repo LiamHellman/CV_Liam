@@ -123,7 +123,18 @@ document.addEventListener("DOMContentLoaded", function () {
             "Designed and implemented core mechanics including player movement, enemy AI, and physics interactions"
           ]
         }
-      ]
+      ],
+      skills: {
+        qualities: ["Punctual", "Eloquent", "Quick Learner", "Organized", "Attentive", "Sociable"],
+        languages: ["French", "English"],
+        interests: ["Cooking", "Robotics", "Computer Science", "Music", "Team Sports", "Visual Arts", "Finance"],
+        technical: {
+          programming: ["JavaScript", "Python", "C#", "HTML", "CSS", "SQL"],
+          frameworks: ["React", "Unity", "jQuery"],
+          tools: ["Git", "Azure", "Terraform", "OpenCV", "Dlib"],
+          databases: ["MySQL", "PostgreSQL"]
+        }
+      }
     },
     fr: {
       // French content (omitted for brevity)
@@ -265,6 +276,60 @@ document.addEventListener("DOMContentLoaded", function () {
       projDiv.appendChild(innerDiv);
       projContainer.appendChild(projDiv);
     });
+
+    // Render Skills & Interests Section
+    const skillsContainer = document.getElementById("skillsContent");
+    skillsContainer.innerHTML = "";
+    const skillsData = content[language].skills;
+    // Qualities
+    const qualitiesHeading = document.createElement("h3");
+    qualitiesHeading.innerText = "Qualities:";
+    qualitiesHeading.className = "text-xl font-bold text-green-400 mt-4";
+    skillsContainer.appendChild(qualitiesHeading);
+    const qualitiesPara = document.createElement("p");
+    qualitiesPara.innerText = skillsData.qualities.join(", ");
+    qualitiesPara.className = "text-green-300";
+    skillsContainer.appendChild(qualitiesPara);
+    // Languages
+    const languagesHeading = document.createElement("h3");
+    languagesHeading.innerText = "Languages:";
+    languagesHeading.className = "text-xl font-bold text-green-400 mt-4";
+    skillsContainer.appendChild(languagesHeading);
+    const languagesPara = document.createElement("p");
+    languagesPara.innerText = skillsData.languages.join(", ");
+    languagesPara.className = "text-green-300";
+    skillsContainer.appendChild(languagesPara);
+    // Interests
+    const interestsHeading = document.createElement("h3");
+    interestsHeading.innerText = "Interests:";
+    interestsHeading.className = "text-xl font-bold text-green-400 mt-4";
+    skillsContainer.appendChild(interestsHeading);
+    const interestsPara = document.createElement("p");
+    interestsPara.innerText = skillsData.interests.join(", ");
+    interestsPara.className = "text-green-300";
+    skillsContainer.appendChild(interestsPara);
+    // Technical Skills
+    const techHeading = document.createElement("h3");
+    techHeading.innerText = "Technical Skills:";
+    techHeading.className = "text-xl font-bold text-green-400 mt-4";
+    skillsContainer.appendChild(techHeading);
+    const technical = skillsData.technical;
+    const programmingPara = document.createElement("p");
+    programmingPara.innerText = "Programming: " + technical.programming.join(", ");
+    programmingPara.className = "text-green-300";
+    skillsContainer.appendChild(programmingPara);
+    const frameworksPara = document.createElement("p");
+    frameworksPara.innerText = "Frameworks: " + technical.frameworks.join(", ");
+    frameworksPara.className = "text-green-300";
+    skillsContainer.appendChild(frameworksPara);
+    const toolsPara = document.createElement("p");
+    toolsPara.innerText = "Tools: " + technical.tools.join(", ");
+    toolsPara.className = "text-green-300";
+    skillsContainer.appendChild(toolsPara);
+    const databasesPara = document.createElement("p");
+    databasesPara.innerText = "Databases: " + technical.databases.join(", ");
+    databasesPara.className = "text-green-300";
+    skillsContainer.appendChild(databasesPara);
   }
 
   // Mobile menu toggle
@@ -296,7 +361,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initial render of content
   renderContent();
 
-  // Shrink the nav on scroll and hide extra items
+  // Shrink the nav on scroll
   window.addEventListener("scroll", function () {
     const nav = document.querySelector("nav");
     if (window.scrollY > 100) {
@@ -306,12 +371,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Smooth scroll for "Get Started" button
+  // Smooth scroll for "Get Started" button with offset adjustment
   const getStartedBtn = document.getElementById("getStarted");
   if(getStartedBtn) {
     getStartedBtn.addEventListener("click", function(e) {
       e.preventDefault();
-      document.getElementById("education").scrollIntoView({ behavior: "smooth" });
+      const edu = document.getElementById("education");
+      const yOffset = -80; // adjust offset as needed
+      const y = edu.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
     });
   }
 });

@@ -1,4 +1,4 @@
-à<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -35,11 +35,11 @@
               class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors hide-on-shrink"
             ></button>
           </div>
-          <!-- Mobile Navigation Controls -->
+          <!-- Mobile Navigation Controls (always visible) -->
           <div class="md:hidden flex items-center space-x-3">
             <button
               id="langToggleMobile"
-              class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors hide-on-shrink"
+              class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors"
             ></button>
             <button id="menuToggle" class="text-green-400 hover:text-green-200">
               <span id="menuIcon"></span>
@@ -54,7 +54,7 @@
           <a href="#education" id="mobileNavEducation" class="block px-3 py-2 hover:text-green-200"></a>
           <a href="#experience" id="mobileNavExperience" class="block px-3 py-2 hover:text-green-200"></a>
           <a href="#projects" id="mobileNavProjects" class="block px-3 py-2 hover:text-green-200"></a>
-          <a href="contact.html" id="mobileNavContact" class="block px-3 py-2 hover:text-green-200 hide-on-shrink">Contact</a>
+          <a href="contact.html" id="mobileNavContact" class="block px-3 py-2 hover:text-green-200">Contact</a>
         </div>
       </div>
     </nav>
@@ -67,8 +67,7 @@
       <div class="max-w-2xl text-center p-8 border border-green-400 rounded-md">
         <!-- Fake terminal prompt -->
         <p class="text-sm mb-4">
-          <span class="text-green-300">C:\Users\Liam\resume&gt;</span> cat
-          introduction.txt
+          <span class="text-green-300">C:\Users\Liam\resume&gt;</span> cat introduction.txt
         </p>
         <h1 id="heroName" class="text-4xl font-extrabold tracking-wide"></h1>
         <p id="heroTitle" class="mt-4 text-2xl"></p>
@@ -102,15 +101,15 @@
     <div id="projects" class="py-12 bg-black fade-in-up delay-4">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 id="projectsHeading" class="text-3xl font-extrabold mb-8">Projects</h2>
-        <div id="projectsContainer" class="grid gap-8 md:grid-cols-2"></div>
+        <div id="projectsContainer" class="Sgrid gap-8 md:grid-cols-2"></div>
       </div>
     </div>
 
-    <!-- Skills Section -->
+    <!-- Skills & Interests Section -->
     <div id="skills" class="py-12 bg-black fade-in-up delay-5">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 id="skillsHeading" class="text-3xl font-extrabold mb-8">Skills & Interests</h2>
-        <!-- (Optional: Add your skills content here) -->
+        <div id="skillsContent" class="mt-8"></div>
       </div>
     </div>
 

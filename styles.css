@@ -11,7 +11,7 @@
 }
 .fade-in-up {
   animation: fadeInUp 1s ease forwards;
-  /* Removed explicit opacity: 0 so elements are visible if animation stalls */
+  /* Removed explicit opacity: 0 so content remains visible if animation lags */
 }
 
 /* Delays for each section */
@@ -34,9 +34,14 @@ nav.shrink .flex {
 nav.shrink a {
   font-size: 0.875rem; /* Smaller link font size */
 }
-/* Hide extra items (Contact and language toggle) when nav shrinks */
+/* Hide extra items (Contact and language toggle) when nav shrinks (desktop only) */
 nav.shrink .hide-on-shrink {
   display: none;
+}
+
+/* Add scroll-margin-top so anchor scrolling leaves space for fixed nav */
+#about, #education, #experience, #projects, #skills {
+  scroll-margin-top: 80px;
 }
 
 /* Additional hover effects for buttons */
