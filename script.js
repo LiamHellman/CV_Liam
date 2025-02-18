@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("Script loaded and DOM ready.");
+
   let language = 'en';
   let isMenuOpen = false;
 
@@ -561,12 +563,14 @@ document.addEventListener("DOMContentLoaded", function () {
     delay: anime.stagger(100)
   });
 
-  // Initial render
+  // Initial render of content
   renderContent();
 
   // Smooth scroll functionality for the "Get Started" button
   document.getElementById("getStarted").addEventListener("click", function(e) {
     e.preventDefault();
+    console.log("Get Started button clicked.");
     document.getElementById("education").scrollIntoView({ behavior: "smooth" });
   });
+  console.log("Get Started button event listener attached.");
 });
