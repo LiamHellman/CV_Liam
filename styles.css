@@ -1,5 +1,3 @@
-/* Existing styles... */
-
 /* Fade in and slide up animation */
 @keyframes fadeInUp {
   0% {
@@ -16,46 +14,38 @@
   opacity: 0;
 }
 
-/* Delays for each section to appear sequentially */
+/* Delays for each section */
 .delay-1 { animation-delay: 0.5s; }
 .delay-2 { animation-delay: 1s; }
 .delay-3 { animation-delay: 1.5s; }
 .delay-4 { animation-delay: 2s; }
 .delay-5 { animation-delay: 2.5s; }
 
-/* Typewriter effect for heroName */
-.typewriter {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid #0000FF;
-  width: 0;
-  animation: typing 3s steps(30, end) forwards, blink-caret 0.75s step-end infinite;
-}
-@keyframes typing { from { width: 0; } to { width: 100%; } }
-@keyframes blink-caret { 50% { border-color: transparent; } }
-
 /* Shrinking nav styles */
 nav {
-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 nav.shrink {
-height: 3rem !important; /* Reduce height from 4rem (h-16) to 3rem (h-12) */
+  height: 3rem !important; /* Reduced nav height */
 }
 nav.shrink .flex {
-height: 3rem !important;
+  height: 3rem !important;
 }
 nav.shrink a {
-font-size: 0.875rem; /* Reduce font size for links */
+  font-size: 0.875rem; /* Smaller link font size */
+}
+/* Hide extra items when nav is shrunk */
+nav.shrink .hide-on-shrink {
+  display: none;
 }
 
 /* Additional hover effects for buttons */
 .button-hover:hover {
-transform: scale(1.05);
-transition: transform 0.3s ease;
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
 }
 
 /* Ensure particles canvas stays behind content */
 #particles-js {
-background-color: #000;
+  background-color: #000;
 }
