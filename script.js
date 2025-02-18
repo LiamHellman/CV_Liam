@@ -137,9 +137,22 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
     fr: {
-      // French content (omitted for brevity)
+      // French content omitted for brevity
     }
   };
+
+  // Helper function to create bubble elements for skills
+  function createBubbles(items) {
+    const container = document.createElement("div");
+    container.className = "flex flex-wrap gap-2 mt-2";
+    items.forEach(item => {
+      const span = document.createElement("span");
+      span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
+      span.innerText = item;
+      container.appendChild(span);
+    });
+    return container;
+  }
 
   function renderContent() {
     // Set navigation texts
@@ -277,59 +290,62 @@ document.addEventListener("DOMContentLoaded", function () {
       projContainer.appendChild(projDiv);
     });
 
-    // Render Skills & Interests Section
+    // Render Skills & Interests Section using bubbles
     const skillsContainer = document.getElementById("skillsContent");
     skillsContainer.innerHTML = "";
     const skillsData = content[language].skills;
+
     // Qualities
     const qualitiesHeading = document.createElement("h3");
     qualitiesHeading.innerText = "Qualities:";
     qualitiesHeading.className = "text-xl font-bold text-green-400 mt-4";
     skillsContainer.appendChild(qualitiesHeading);
-    const qualitiesPara = document.createElement("p");
-    qualitiesPara.innerText = skillsData.qualities.join(", ");
-    qualitiesPara.className = "text-green-300";
-    skillsContainer.appendChild(qualitiesPara);
+    skillsContainer.appendChild(createBubbles(skillsData.qualities));
+
     // Languages
     const languagesHeading = document.createElement("h3");
     languagesHeading.innerText = "Languages:";
     languagesHeading.className = "text-xl font-bold text-green-400 mt-4";
     skillsContainer.appendChild(languagesHeading);
-    const languagesPara = document.createElement("p");
-    languagesPara.innerText = skillsData.languages.join(", ");
-    languagesPara.className = "text-green-300";
-    skillsContainer.appendChild(languagesPara);
+    skillsContainer.appendChild(createBubbles(skillsData.languages));
+
     // Interests
     const interestsHeading = document.createElement("h3");
     interestsHeading.innerText = "Interests:";
     interestsHeading.className = "text-xl font-bold text-green-400 mt-4";
     skillsContainer.appendChild(interestsHeading);
-    const interestsPara = document.createElement("p");
-    interestsPara.innerText = skillsData.interests.join(", ");
-    interestsPara.className = "text-green-300";
-    skillsContainer.appendChild(interestsPara);
+    skillsContainer.appendChild(createBubbles(skillsData.interests));
+
     // Technical Skills
     const techHeading = document.createElement("h3");
     techHeading.innerText = "Technical Skills:";
     techHeading.className = "text-xl font-bold text-green-400 mt-4";
     skillsContainer.appendChild(techHeading);
+
     const technical = skillsData.technical;
-    const programmingPara = document.createElement("p");
-    programmingPara.innerText = "Programming: " + technical.programming.join(", ");
-    programmingPara.className = "text-green-300";
-    skillsContainer.appendChild(programmingPara);
-    const frameworksPara = document.createElement("p");
-    frameworksPara.innerText = "Frameworks: " + technical.frameworks.join(", ");
-    frameworksPara.className = "text-green-300";
-    skillsContainer.appendChild(frameworksPara);
-    const toolsPara = document.createElement("p");
-    toolsPara.innerText = "Tools: " + technical.tools.join(", ");
-    toolsPara.className = "text-green-300";
-    skillsContainer.appendChild(toolsPara);
-    const databasesPara = document.createElement("p");
-    databasesPara.innerText = "Databases: " + technical.databases.join(", ");
-    databasesPara.className = "text-green-300";
-    skillsContainer.appendChild(databasesPara);
+    const programmingHeading = document.createElement("h4");
+    programmingHeading.innerText = "Programming:";
+    programmingHeading.className = "text-lg font-bold text-green-400 mt-2";
+    skillsContainer.appendChild(programmingHeading);
+    skillsContainer.appendChild(createBubbles(technical.programming));
+
+    const frameworksHeading = document.createElement("h4");
+    frameworksHeading.innerText = "Frameworks:";
+    frameworksHeading.className = "text-lg font-bold text-green-400 mt-2";
+    skillsContainer.appendChild(frameworksHeading);
+    skillsContainer.appendChild(createBubbles(technical.frameworks));
+
+    const toolsHeading = document.createElement("h4");
+    toolsHeading.innerText = "Tools:";
+    toolsHeading.className = "text-lg font-bold text-green-400 mt-2";
+    skillsContainer.appendChild(toolsHeading);
+    skillsContainer.appendChild(createBubbles(technical.tools));
+
+    const databasesHeading = document.createElement("h4");
+    databasesHeading.innerText = "Databases:";
+    databasesHeading.className = "text-lg font-bold text-green-400 mt-2";
+    skillsContainer.appendChild(databasesHeading);
+    skillsContainer.appendChild(createBubbles(technical.databases));
   }
 
   // Mobile menu toggle
@@ -361,25 +377,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initial render of content
   renderContent();
 
-  // Shrink the nav on scroll
+  // Transform nav into a sidebar when scrolling down
   window.addEventListener("scroll", function () {
     const nav = document.querySelector("nav");
     if (window.scrollY > 100) {
-      nav.classList.add("shrink");
+      nav.classList.add("sidebar");
     } else {
-      nav.classList.remove("shrink");
+      nav.classList.remove("sidebar");
     }
   });
-
-  // Smooth scroll for "Get Started" button with offset adjustment
-  const getStartedBtn = document.getElementById("getStarted");
-  if(getStartedBtn) {
-    getStartedBtn.addEventListener("click", function(e) {
-      e.preventDefault();
-      const edu = document.getElementById("education");
-      const yOffset = -80; // adjust offset as needed
-      const y = edu.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    });
-  }
 });

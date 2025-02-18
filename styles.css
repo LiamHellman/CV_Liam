@@ -11,7 +11,7 @@
 }
 .fade-in-up {
   animation: fadeInUp 1s ease forwards;
-  /* Removed explicit opacity: 0 so content remains visible if animation lags */
+  /* Removed explicit opacity: 0 so content stays visible */
 }
 
 /* Delays for each section */
@@ -21,25 +21,41 @@
 .delay-4 { animation-delay: 2s; }
 .delay-5 { animation-delay: 2.5s; }
 
-/* Shrinking nav styles */
+/* Default nav styles */
 nav {
   transition: all 0.3s ease;
-}
-nav.shrink {
-  height: 3rem !important; /* Reduced height */
-}
-nav.shrink .flex {
-  height: 3rem !important;
-}
-nav.shrink a {
-  font-size: 0.875rem; /* Smaller link font size */
-}
-/* Hide extra items (Contact and language toggle) when nav shrinks (desktop only) */
-nav.shrink .hide-on-shrink {
-  display: none;
+  height: 4rem;
+  width: 100%;
 }
 
-/* Add scroll-margin-top so anchor scrolling leaves space for fixed nav */
+/* When nav transforms into a sidebar */
+nav.sidebar {
+  top: 0;
+  left: 0;
+  right: auto;
+  width: 200px;
+  height: 100%;
+  padding-top: 1rem;
+}
+nav.sidebar .flex {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  height: auto;
+}
+nav.sidebar a,
+nav.sidebar button {
+  width: 100%;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+/* In non-sidebar mode (top nav), show extra items on desktop */
+nav:not(.sidebar) .hide-on-shrink {
+  display: inline-block;
+}
+
+/* Ensure anchor scrolling leaves space for fixed nav/sidebar */
 #about, #education, #experience, #projects, #skills {
   scroll-margin-top: 80px;
 }
