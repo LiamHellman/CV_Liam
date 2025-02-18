@@ -124,7 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
           ]
         }
       ]
-      // Additional sections (e.g., skills) can be added here if desired.
     },
     fr: {
       // French content (omitted for brevity)
@@ -297,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initial render of content
   renderContent();
 
-  // Shrink the nav on scroll
+  // Shrink the nav on scroll and hide extra items
   window.addEventListener("scroll", function () {
     const nav = document.querySelector("nav");
     if (window.scrollY > 100) {

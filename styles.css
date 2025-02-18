@@ -11,7 +11,7 @@
 }
 .fade-in-up {
   animation: fadeInUp 1s ease forwards;
-  opacity: 0;
+  /* Removed explicit opacity: 0 so elements are visible if animation stalls */
 }
 
 /* Delays for each section */
