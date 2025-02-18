@@ -11,7 +11,6 @@
 }
 .fade-in-up {
   animation: fadeInUp 1s ease forwards;
-  /* No explicit opacity: 0 to ensure content remains visible */
 }
 
 /* Delays for each section */
@@ -21,38 +20,29 @@
 .delay-4 { animation-delay: 2s; }
 .delay-5 { animation-delay: 2.5s; }
 
-/* Default top navigation styles */
+/* Default top navigation styles (in document flow) */
 nav {
   transition: all 0.3s ease;
   height: 4rem;
   width: 100%;
 }
 
-/* When nav transforms into a sidebar */
-nav.sidebar {
+/* When nav is toggled as a sidebar */
+nav.sidebar-active {
+  position: fixed;
   top: 0;
   left: 0;
   right: auto;
   width: 200px;
   height: 100%;
   padding-top: 1rem;
+  background-color: #1a202c; /* same as bg-gray-900 */
+  z-index: 50;
 }
-nav.sidebar .flex {
+nav.sidebar-active .flex {
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
-  height: auto;
-}
-nav.sidebar a,
-nav.sidebar button {
-  width: 100%;
-  text-align: left;
-  padding-left: 1rem;
-}
-
-/* In non-sidebar mode (top nav), extra items are visible */
-nav:not(.sidebar) .hide-on-shrink {
-  display: inline-block;
 }
 
 /* Ensure anchor scrolling leaves space for fixed nav/sidebar */
@@ -60,13 +50,26 @@ nav:not(.sidebar) .hide-on-shrink {
   scroll-margin-top: 80px;
 }
 
-/* Additional hover effects for buttons */
+/* Hover effects for buttons */
 .button-hover:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
 
-/* Ensure particles canvas stays behind content */
+/* Particles canvas behind content */
 #particles-js {
   background-color: #000;
+}
+
+/* Sidebar toggle button styling */
+#sidebarToggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #1a202c;
+  color: #68d391; /* equivalent to green-400 */
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  z-index: 60;
 }

@@ -16,8 +16,8 @@
     <!-- Particles Background -->
     <div id="particles-js" class="fixed top-0 left-0 w-full h-full z-0"></div>
 
-    <!-- Navigation (same as index.html) -->
-    <nav class="bg-gray-900 shadow-lg fade-in-up">
+    <!-- Navigation (normal document flow) -->
+    <nav id="mainNav" class="bg-gray-900 shadow-lg fade-in-up transition-all duration-300">
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
@@ -39,7 +39,7 @@
               class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors"
             >EN/FR</button>
             <button id="menuToggle" class="text-green-400 hover:text-green-200">
-              <span id="menuIcon"></span>
+              <span id="menuIcon">☰</span>
             </button>
           </div>
         </div>
@@ -52,6 +52,11 @@
         </div>
       </div>
     </nav>
+
+    <!-- Sidebar Toggle Button (initially hidden) -->
+    <div id="sidebarToggle" class="hidden">
+      ☰
+    </div>
 
     <!-- Contact Section -->
     <div class="min-h-screen flex flex-col items-center justify-center fade-in-up delay-1">
@@ -109,7 +114,6 @@
       document.getElementById("contactForm").addEventListener("submit", function (e) {
         e.preventDefault();
         document.getElementById("formFeedback").innerText = "Message sent! Thank you.";
-        // Here you could also add an AJAX request to actually send the email.
         this.reset();
       });
     </script>

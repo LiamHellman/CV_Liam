@@ -15,9 +15,9 @@
   <body class="min-h-screen bg-black font-mono text-green-400 relative z-10">
     <!-- Particles Background -->
     <div id="particles-js" class="fixed top-0 left-0 w-full h-full z-0"></div>
-
-    <!-- Navigation (transforms into sidebar on scroll) -->
-    <nav class="bg-gray-900 shadow-lg fade-in-up fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    
+    <!-- Navigation (normal document flow; not fixed initially) -->
+    <nav id="mainNav" class="bg-gray-900 shadow-lg fade-in-up transition-all duration-300">
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
@@ -29,10 +29,11 @@
             <a href="#education" id="navEducation" class="hover:text-green-200">Education</a>
             <a href="#experience" id="navExperience" class="hover:text-green-200">Experience</a>
             <a href="#projects" id="navProjects" class="hover:text-green-200">Projects</a>
-            <a href="contact.html" id="navContact" class="hover:text-green-200 hide-on-shrink">Contact</a>
+            <a href="#skills" id="navSkills" class="hover:text-green-200">Skills</a>
+            <a href="contact.html" id="navContact" class="hover:text-green-200">Contact</a>
             <button
               id="langToggleDesktop"
-              class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors hide-on-shrink"
+              class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors"
             >EN/FR</button>
           </div>
           <!-- Mobile Navigation Controls (always visible) -->
@@ -54,16 +55,17 @@
           <a href="#education" id="mobileNavEducation" class="block px-3 py-2 hover:text-green-200">Education</a>
           <a href="#experience" id="mobileNavExperience" class="block px-3 py-2 hover:text-green-200">Experience</a>
           <a href="#projects" id="mobileNavProjects" class="block px-3 py-2 hover:text-green-200">Projects</a>
+          <a href="#skills" id="mobileNavSkills" class="block px-3 py-2 hover:text-green-200">Skills</a>
           <a href="contact.html" id="mobileNavContact" class="block px-3 py-2 hover:text-green-200">Contact</a>
         </div>
       </div>
     </nav>
-
+    
+    <!-- Sidebar Toggle Button (initially hidden) -->
+    <div id="sidebarToggle" class="hidden">☰</div>
+    
     <!-- Hero Section (About) -->
-    <div
-      id="about"
-      class="bg-black pt-20 min-h-screen flex flex-col items-center justify-center fade-in-up delay-1"
-    >
+    <div id="about" class="bg-black pt-20 min-h-screen flex flex-col items-center justify-center fade-in-up delay-1">
       <div class="max-w-2xl text-center p-8 border border-green-400 rounded-md">
         <!-- Fake terminal prompt -->
         <p class="text-sm mb-4">
@@ -74,7 +76,7 @@
         <p id="heroLocation" class="mt-2 text-lg"></p>
       </div>
     </div>
-
+    
     <!-- Education Section -->
     <div id="education" class="py-12 bg-black fade-in-up delay-2">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,7 +84,7 @@
         <div id="educationContainer" class="space-y-8"></div>
       </div>
     </div>
-
+    
     <!-- Experience Section -->
     <div id="experience" class="py-12 bg-black fade-in-up delay-3">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -90,7 +92,7 @@
         <div id="experienceContainer" class="space-y-8"></div>
       </div>
     </div>
-
+    
     <!-- Projects Section -->
     <div id="projects" class="py-12 bg-black fade-in-up delay-4">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,7 +100,7 @@
         <div id="projectsContainer" class="grid gap-8 md:grid-cols-2"></div>
       </div>
     </div>
-
+    
     <!-- Skills & Interests Section -->
     <div id="skills" class="py-12 bg-black fade-in-up delay-5">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,7 +108,7 @@
         <div id="skillsContent" class="mt-8"></div>
       </div>
     </div>
-
+    
     <!-- External Libraries for Animation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
