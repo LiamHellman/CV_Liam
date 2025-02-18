@@ -175,12 +175,12 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('heroTitle').innerText = personalInfo.title;
     document.getElementById('heroLocation').innerText = personalInfo.location;
 
-    // Render Education Section
+    // Render Education Section (card style)
     const eduContainer = document.getElementById('educationContainer');
     eduContainer.innerHTML = "";
     content[language].education.forEach(edu => {
       const eduDiv = document.createElement("div");
-      eduDiv.className = "bg-gray-800 shadow rounded-lg p-6";
+      eduDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
       const headerDiv = document.createElement("div");
       headerDiv.className = "flex justify-between items-start";
       const innerDiv = document.createElement("div");
@@ -210,12 +210,12 @@ document.addEventListener("DOMContentLoaded", function () {
       eduContainer.appendChild(eduDiv);
     });
 
-    // Render Experience Section
+    // Render Experience Section (card style)
     const expContainer = document.getElementById('experienceContainer');
     expContainer.innerHTML = "";
     content[language].experience.forEach(exp => {
       const expDiv = document.createElement("div");
-      expDiv.className = "bg-gray-800 shadow rounded-lg p-6";
+      expDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
       const headerDiv = document.createElement("div");
       headerDiv.className = "flex justify-between items-start";
       const innerDiv = document.createElement("div");
@@ -245,14 +245,12 @@ document.addEventListener("DOMContentLoaded", function () {
       expContainer.appendChild(expDiv);
     });
 
-    // Render Projects Section
+    // Render Projects Section (already using card style)
     const projContainer = document.getElementById('projectsContainer');
     projContainer.innerHTML = "";
     content[language].projects.forEach(proj => {
       const projDiv = document.createElement("div");
-      projDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300";
-      const innerDiv = document.createElement("div");
-      innerDiv.className = "p-6";
+      projDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
       const headerDiv = document.createElement("div");
       headerDiv.className = "flex justify-between items-start";
       const h3 = document.createElement("h3");
@@ -282,70 +280,74 @@ document.addEventListener("DOMContentLoaded", function () {
         li.innerText = "• " + point;
         ul.appendChild(li);
       });
-      innerDiv.appendChild(headerDiv);
-      innerDiv.appendChild(descP);
-      innerDiv.appendChild(techDiv);
-      innerDiv.appendChild(ul);
-      projDiv.appendChild(innerDiv);
+      projDiv.appendChild(headerDiv);
+      projDiv.appendChild(descP);
+      projDiv.appendChild(techDiv);
+      projDiv.appendChild(ul);
       projContainer.appendChild(projDiv);
     });
 
-    // Render Skills & Interests Section using bubbles
-    const skillsContainer = document.getElementById("skillsContent");
-    skillsContainer.innerHTML = "";
+    // Render Skills & Interests Section (wrap entire skills content in a card)
+    const skillsSectionContainer = document.getElementById("skillsContent");
+    skillsSectionContainer.innerHTML = "";
+    const skillsCard = document.createElement("div");
+    skillsCard.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
+
     const skillsData = content[language].skills;
 
     // Qualities
     const qualitiesHeading = document.createElement("h3");
     qualitiesHeading.innerText = "Qualities:";
-    qualitiesHeading.className = "text-xl font-bold text-green-400 mt-4";
-    skillsContainer.appendChild(qualitiesHeading);
-    skillsContainer.appendChild(createBubbles(skillsData.qualities));
+    qualitiesHeading.className = "text-xl font-bold text-green-400";
+    skillsCard.appendChild(qualitiesHeading);
+    skillsCard.appendChild(createBubbles(skillsData.qualities));
 
     // Languages
     const languagesHeading = document.createElement("h3");
     languagesHeading.innerText = "Languages:";
     languagesHeading.className = "text-xl font-bold text-green-400 mt-4";
-    skillsContainer.appendChild(languagesHeading);
-    skillsContainer.appendChild(createBubbles(skillsData.languages));
+    skillsCard.appendChild(languagesHeading);
+    skillsCard.appendChild(createBubbles(skillsData.languages));
 
     // Interests
     const interestsHeading = document.createElement("h3");
     interestsHeading.innerText = "Interests:";
     interestsHeading.className = "text-xl font-bold text-green-400 mt-4";
-    skillsContainer.appendChild(interestsHeading);
-    skillsContainer.appendChild(createBubbles(skillsData.interests));
+    skillsCard.appendChild(interestsHeading);
+    skillsCard.appendChild(createBubbles(skillsData.interests));
 
     // Technical Skills
     const techHeading = document.createElement("h3");
     techHeading.innerText = "Technical Skills:";
     techHeading.className = "text-xl font-bold text-green-400 mt-4";
-    skillsContainer.appendChild(techHeading);
+    skillsCard.appendChild(techHeading);
 
     const technical = skillsData.technical;
     const programmingHeading = document.createElement("h4");
     programmingHeading.innerText = "Programming:";
     programmingHeading.className = "text-lg font-bold text-green-400 mt-2";
-    skillsContainer.appendChild(programmingHeading);
-    skillsContainer.appendChild(createBubbles(technical.programming));
+    skillsCard.appendChild(programmingHeading);
+    skillsCard.appendChild(createBubbles(technical.programming));
 
     const frameworksHeading = document.createElement("h4");
     frameworksHeading.innerText = "Frameworks:";
     frameworksHeading.className = "text-lg font-bold text-green-400 mt-2";
-    skillsContainer.appendChild(frameworksHeading);
-    skillsContainer.appendChild(createBubbles(technical.frameworks));
+    skillsCard.appendChild(frameworksHeading);
+    skillsCard.appendChild(createBubbles(technical.frameworks));
 
     const toolsHeading = document.createElement("h4");
     toolsHeading.innerText = "Tools:";
     toolsHeading.className = "text-lg font-bold text-green-400 mt-2";
-    skillsContainer.appendChild(toolsHeading);
-    skillsContainer.appendChild(createBubbles(technical.tools));
+    skillsCard.appendChild(toolsHeading);
+    skillsCard.appendChild(createBubbles(technical.tools));
 
     const databasesHeading = document.createElement("h4");
     databasesHeading.innerText = "Databases:";
     databasesHeading.className = "text-lg font-bold text-green-400 mt-2";
-    skillsContainer.appendChild(databasesHeading);
-    skillsContainer.appendChild(createBubbles(technical.databases));
+    skillsCard.appendChild(databasesHeading);
+    skillsCard.appendChild(createBubbles(technical.databases));
+
+    skillsSectionContainer.appendChild(skillsCard);
   }
 
   // Mobile menu toggle

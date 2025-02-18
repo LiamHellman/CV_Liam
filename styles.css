@@ -21,7 +21,7 @@
 .delay-4 { animation-delay: 2s; }
 .delay-5 { animation-delay: 2.5s; }
 
-/* Default nav styles */
+/* Default nav styles (top nav) */
 nav {
   transition: all 0.3s ease;
   height: 4rem;
