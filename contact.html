@@ -16,47 +16,23 @@
     <!-- Particles Background -->
     <div id="particles-js" class="fixed top-0 left-0 w-full h-full z-0"></div>
 
-    <!-- Navigation (normal document flow) -->
-    <nav id="mainNav" class="bg-gray-900 shadow-lg fade-in-up transition-all duration-300">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <span id="navName" class="text-xl font-bold">Liam Hellman</span>
-          </div>
-          <!-- Desktop Navigation -->
-          <div class="hidden md:flex items-center space-x-8">
-            <a href="index.html" class="hover:text-green-200">Home</a>
-            <a href="contact.html" class="hover:text-green-200">Contact</a>
-            <button
-              id="langToggleDesktop"
-              class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors"
-            >EN/FR</button>
-          </div>
-          <!-- Mobile Navigation Controls -->
-          <div class="md:hidden flex items-center space-x-3">
-            <button
-              id="langToggleMobile"
-              class="px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors"
-            >EN/FR</button>
-            <button id="menuToggle" class="text-green-400 hover:text-green-200">
-              <span id="menuIcon">☰</span>
-            </button>
-          </div>
-        </div>
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-gray-900 shadow-lg transform -translate-x-full transition-transform duration-300 z-50">
+      <div class="flex flex-col p-4">
+        <span class="text-xl font-bold text-green-400 mb-6">Liam Hellman</span>
+        <a href="index.html" class="text-green-400 hover:text-green-200 mb-2">Home</a>
+        <a href="contact.html" class="text-green-400 hover:text-green-200 mb-2">Contact</a>
+        <button id="langToggleSidebar" class="mt-4 px-3 py-1 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors">EN/FR</button>
       </div>
-      <!-- Mobile Navigation Menu -->
-      <div id="mobileMenu" class="md:hidden hidden">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a href="index.html" class="block px-3 py-2 hover:text-green-200">Home</a>
-          <a href="contact.html" class="block px-3 py-2 hover:text-green-200">Contact</a>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Sidebar Toggle Button (initially hidden) -->
-    <div id="sidebarToggle" class="hidden">
-      ☰
     </div>
+
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebarToggle" class="fixed top-4 left-4 z-50 p-2 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors">
+      ☰
+    </button>
+
+    <!-- Overlay for Sidebar -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
 
     <!-- Contact Section -->
     <div class="min-h-screen flex flex-col items-center justify-center fade-in-up delay-1">
@@ -109,13 +85,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <!-- Custom Script -->
     <script src="script.js"></script>
-    <script>
-      // Simple contact form submission handler
-      document.getElementById("contactForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        document.getElementById("formFeedback").innerText = "Message sent! Thank you.";
-        this.reset();
-      });
-    </script>
   </body>
 </html>

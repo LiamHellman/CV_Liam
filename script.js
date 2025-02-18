@@ -2,8 +2,65 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Script loaded and DOM ready.");
 
   let language = "en";
-  let isMenuOpen = false;
+  let isSidebarOpen = false;
 
+  const sidebar = document.getElementById("sidebar");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+  // Toggle sidebar
+  sidebarToggle.addEventListener("click", function () {
+    toggleSidebar();
+  });
+
+  // Close sidebar when clicking overlay
+  sidebarOverlay.addEventListener("click", function () {
+    closeSidebar();
+  });
+
+  // Close sidebar when clicking a link
+  const sidebarLinks = document.querySelectorAll("#sidebar a");
+  sidebarLinks.forEach(link => {
+    link.addEventListener("click", function () {
+      closeSidebar();
+    });
+  });
+
+  // Language toggle for sidebar
+  document.getElementById("langToggleSidebar").addEventListener("click", function () {
+    language = language === "en" ? "fr" : "en";
+    renderContent();
+    closeSidebar(); // Close the sidebar when language is toggled
+  });
+
+  // Initialize Particles.js
+  particlesJS.load("particles-js", "particles.json", function () {
+    console.log("Particles.js config loaded");
+  });
+
+  // Function to toggle sidebar
+  function toggleSidebar() {
+    isSidebarOpen = !isSidebarOpen;
+    if (isSidebarOpen) {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarOverlay.classList.remove("hidden");
+      document.body.classList.add("sidebar-open");
+    } else {
+      sidebar.classList.add("-translate-x-full");
+      sidebarOverlay.classList.add("hidden");
+      document.body.classList.remove("sidebar-open");
+    }
+  }
+
+  // Function to close sidebar
+  function closeSidebar() {
+    isSidebarOpen = false;
+    sidebar.classList.add("-translate-x-full");
+    sidebarOverlay.classList.add("hidden");
+    document.body.classList.remove("sidebar-open");
+  }
+
+  // Translations and content
   const translations = {
     en: {
       about: "About",
@@ -252,52 +309,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
+  // Function to create bubbles for skills
   function createBubbles(items) {
     const container = document.createElement("div");
     container.className = "flex flex-wrap gap-2 mt-2";
     items.forEach(item => {
       const span = document.createElement("span");
-      span.className =
-        "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
+      span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
       span.innerText = item;
       container.appendChild(span);
     });
     return container;
   }
 
+  // Function to render content based on language
   function renderContent() {
-    // Set navigation texts
-    document.getElementById("navAbout").innerText = translations[language].about;
-    document.getElementById("navEducation").innerText = translations[language].education;
-    document.getElementById("navExperience").innerText = translations[language].experience;
-    document.getElementById("navProjects").innerText = translations[language].projects;
-    document.getElementById("navContact").innerText = translations[language].contact;
-
-    // Mobile Navigation texts (if present)
-    if (document.getElementById("mobileNavAbout")) {
-      document.getElementById("mobileNavAbout").innerText = translations[language].about;
-      document.getElementById("mobileNavEducation").innerText = translations[language].education;
-      document.getElementById("mobileNavExperience").innerText = translations[language].experience;
-      document.getElementById("mobileNavProjects").innerText = translations[language].projects;
-      document.getElementById("mobileNavContact").innerText = translations[language].contact;
-    }
-
-    // Hero Section (if present)
-    if (document.getElementById("heroName")) {
-      const personalInfo = content[language].personalInfo;
-      document.getElementById("heroName").innerText = personalInfo.name;
-      document.getElementById("heroTitle").innerText = personalInfo.title;
-      document.getElementById("heroLocation").innerText = personalInfo.location;
-    }
-
     // Render Education Section (if container exists)
     const eduContainer = document.getElementById("educationContainer");
     if (eduContainer) {
-      eduContainer.innerHTML = "";
+      eduContainer.innerHTML = ""; // Clear existing content
       content[language].education.forEach(edu => {
         const eduDiv = document.createElement("div");
-        eduDiv.className =
-          "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
+        eduDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
         const headerDiv = document.createElement("div");
         headerDiv.className = "flex justify-between items-start";
         const innerDiv = document.createElement("div");
@@ -331,11 +364,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Render Experience Section (if container exists)
     const expContainer = document.getElementById("experienceContainer");
     if (expContainer) {
-      expContainer.innerHTML = "";
+      expContainer.innerHTML = ""; // Clear existing content
       content[language].experience.forEach(exp => {
         const expDiv = document.createElement("div");
-        expDiv.className =
-          "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
+        expDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
         const headerDiv = document.createElement("div");
         headerDiv.className = "flex justify-between items-start";
         const innerDiv = document.createElement("div");
@@ -369,11 +401,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Render Projects Section (if container exists)
     const projContainer = document.getElementById("projectsContainer");
     if (projContainer) {
-      projContainer.innerHTML = "";
+      projContainer.innerHTML = ""; // Clear existing content
       content[language].projects.forEach(proj => {
         const projDiv = document.createElement("div");
-        projDiv.className =
-          "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
+        projDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
         const headerDiv = document.createElement("div");
         headerDiv.className = "flex justify-between items-start";
         const h3 = document.createElement("h3");
@@ -414,10 +445,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Render Skills & Interests Section (if container exists)
     const skillsSectionContainer = document.getElementById("skillsContent");
     if (skillsSectionContainer) {
-      skillsSectionContainer.innerHTML = "";
+      skillsSectionContainer.innerHTML = ""; // Clear existing content
       const skillsCard = document.createElement("div");
-      skillsCard.className =
-        "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
+      skillsCard.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
 
       const skillsData = content[language].skills;
 
@@ -477,70 +507,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Mobile menu toggle
-  document.getElementById("menuToggle").addEventListener("click", function () {
-    isMenuOpen = !isMenuOpen;
-    const mobileMenu = document.getElementById("mobileMenu");
-    if (isMenuOpen) {
-      mobileMenu.classList.remove("hidden");
-      document.getElementById("menuIcon").innerText = "✕";
-    } else {
-      mobileMenu.classList.add("hidden");
-      document.getElementById("menuIcon").innerText = "☰";
-    }
-  });
-
-  // Language toggle event listeners
-  document.getElementById("langToggleDesktop").addEventListener("click", function () {
-    language = language === "en" ? "fr" : "en";
-    renderContent();
-  });
-  document.getElementById("langToggleMobile").addEventListener("click", function () {
-    language = language === "en" ? "fr" : "en";
-    renderContent();
-  });
-
-  // Initialize Particles.js
-  particlesJS.load("particles-js", "particles.json", function () {
-    console.log("Particles.js config loaded");
-  });
-
-  // Anime.js animations for nav items
-  anime({
-    targets: "nav a, nav button",
-    translateY: [-10, 0],
-    opacity: [0, 1],
-    delay: anime.stagger(100)
-  });
-
   // Initial render of content
   renderContent();
-
-  // Scroll event: when scrolling past 100px, hide the nav (if not toggled open) and show the sidebar toggle button
-  window.addEventListener("scroll", function () {
-    const sidebarToggle = document.getElementById("sidebarToggle");
-    const mainNav = document.getElementById("mainNav");
-    if (window.scrollY > 100) {
-      if (!mainNav.classList.contains("sidebar-active")) {
-        mainNav.style.display = "none";
-      }
-      sidebarToggle.classList.remove("hidden");
-    } else {
-      mainNav.style.display = "block";
-      mainNav.classList.remove("sidebar-active");
-      sidebarToggle.classList.add("hidden");
-    }
-  });
-
-  // Sidebar toggle click: toggle nav into a fixed sidebar or hide it
-  document.getElementById("sidebarToggle").addEventListener("click", function () {
-    const mainNav = document.getElementById("mainNav");
-    if (mainNav.classList.contains("sidebar-active")) {
-      mainNav.classList.remove("sidebar-active");
-      mainNav.style.display = "none";
-    } else {
-      mainNav.classList.add("sidebar-active");
-      mainNav.style.display = "block";
-    }
-  });
 });

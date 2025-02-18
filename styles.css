@@ -9,6 +9,7 @@
     opacity: 1;
   }
 }
+
 .fade-in-up {
   animation: fadeInUp 1s ease forwards;
 }
@@ -20,40 +21,35 @@
 .delay-4 { animation-delay: 2s; }
 .delay-5 { animation-delay: 2.5s; }
 
-/* Default top navigation styles (in document flow) */
-nav {
-  transition: all 0.3s ease;
-  height: 4rem;
-  width: 100%;
-}
-
-/* When nav is toggled as a sidebar */
-nav.sidebar-active {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: auto;
-  width: 200px;
-  height: 100%;
-  padding-top: 1rem;
-  background-color: #1a202c; /* same as bg-gray-900 */
+/* Sidebar styles */
+#sidebar {
+  transition: transform 0.3s ease;
   z-index: 50;
 }
-nav.sidebar-active .flex {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
+
+#sidebar.open {
+  transform: translateX(0);
 }
 
-/* Ensure anchor scrolling leaves space for fixed nav/sidebar */
-#about, #education, #experience, #projects, #skills {
-  scroll-margin-top: 80px;
+/* Sidebar overlay */
+#sidebarOverlay {
+  transition: opacity 0.3s ease;
+  z-index: 40;
 }
 
-/* Hover effects for buttons */
-.button-hover:hover {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
+#sidebarOverlay.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* Ensure content is not hidden behind the sidebar */
+body {
+  padding-left: 0;
+  transition: padding-left 0.3s ease;
+}
+
+body.sidebar-open {
+  padding-left: 256px; /* Adjust based on sidebar width */
 }
 
 /* Particles canvas behind content */
@@ -61,15 +57,204 @@ nav.sidebar-active .flex {
   background-color: #000;
 }
 
-/* Sidebar toggle button styling */
+/* Ensure anchor scrolling leaves space for fixed nav */
+#about, #education, #experience, #projects, #skills {
+  scroll-margin-top: 20px; /* Adjust as needed */
+}
+
+/* Navigation styles */
+nav {
+  transition: all 0.3s ease;
+  height: 4rem;
+  width: 100%;
+}
+
+/* Collapsed navigation styles */
+nav.collapsed {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Start off-screen */
+  width: 250px;
+  height: 100vh;
+  background-color: #1a202c;
+  z-index: 50;
+  transition: left 0.3s ease;
+}
+
+/* When nav is expanded */
+nav.collapsed.expanded {
+  left: 0;
+}
+
+/* Adjust nav content when collapsed */
+nav.collapsed .max-w-7xl {
+  padding: 1rem;
+}
+
+nav.collapsed .flex {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+nav.collapsed .hidden.md\:flex {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+nav.collapsed .hidden.md\:flex a {
+  padding: 0.75rem 0;
+  width: 100%;
+}
+
+/* Toggle button styles */
 #sidebarToggle {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 1rem;
+  left: 1rem;
+  z-index: 60;
   background-color: #1a202c;
-  color: #68d391; /* equivalent to green-400 */
+  color: #48bb78;
   padding: 0.5rem;
   border-radius: 0.25rem;
   cursor: pointer;
-  z-index: 60;
+  display: block;
+}
+
+#sidebarToggle.visible {
+  display: block;
+}
+
+/* Overlay for when sidebar is expanded */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+.nav-overlay.visible {
+  display: block;
+}
+
+/* General styles for the contact form */
+#contactForm input,
+#contactForm textarea {
+  background-color: #000;
+  border: 1px solid #48bb78;
+  color: #48bb78;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  width: 100%;
+}
+
+#contactForm input:focus,
+#contactForm textarea:focus {
+  outline: none;
+  border-color: #48bb78;
+  box-shadow: 0 0 0 2px rgba(72, 187, 120, 0.5);
+}
+
+#contactForm button {
+  background-color: transparent;
+  border: 1px solid #48bb78;
+  color: #48bb78;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#contactForm button:hover {
+  background-color: #48bb78;
+  color: #000;
+}
+
+/* Styles for the feedback message */
+#formFeedback {
+  color: #48bb78;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Styles for the hero section */
+#heroName {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 800;
+  color: #48bb78;
+}
+
+#heroTitle {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: #48bb78;
+}
+
+#heroLocation {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: #48bb78;
+}
+
+/* Styles for the education, experience, and projects sections */
+.bg-gray-800 {
+  background-color: #1a202c;
+}
+
+.border-green-400 {
+  border-color: #48bb78;
+}
+
+.text-green-400 {
+  color: #48bb78;
+}
+
+.text-green-300 {
+  color: #68d391;
+}
+
+.hover\:text-green-200:hover {
+  color: #9ae6b4;
+}
+
+.hover\:shadow-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Styles for the skills section */
+.bg-green-900 {
+  background-color: #1c4532;
+}
+
+.text-green-400 {
+  color: #48bb78;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+/* Ensure the body takes up the full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure the particles background covers the entire screen */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
