@@ -7,7 +7,7 @@
       "value": "#00FFFF"
     },
     "shape": {
-      "type": "triangle"
+      "type": "circle"
     },
     "opacity": {
       "value": 0.5
@@ -44,7 +44,7 @@
         "distance": 100
       },
       "push": {
-        "particles_nb": 4
+        "particles_nb": 10
       }
     }
   },
