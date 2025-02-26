@@ -258,3 +258,77 @@ html, body {
   height: 100%;
   z-index: -1;
 }
+
+#terminal-container {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+#terminal-toggle {
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(72, 187, 120, 0.5);
+  transition: all 0.3s ease;
+}
+
+#terminal-toggle:hover {
+  box-shadow: 0 0 15px rgba(72, 187, 120, 0.8);
+  transform: scale(1.05);
+}
+
+#terminal-output {
+  scrollbar-width: thin;
+  scrollbar-color: #48bb78 #1a202c;
+}
+
+#terminal-output::-webkit-scrollbar {
+  width: 6px;
+}
+
+#terminal-output::-webkit-scrollbar-track {
+  background: #1a202c;
+}
+
+#terminal-output::-webkit-scrollbar-thumb {
+  background-color: #48bb78;
+  border-radius: 10px;
+}
+
+#terminal-input {
+  caret-color: #48bb78;
+}
+
+/* Terminal animations */
+@keyframes terminalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#terminal-container.flex {
+  animation: terminalFadeIn 0.3s ease forwards;
+}
+
+/* Terminal text blinking cursor */
+#terminal-input::after {
+  content: '|';
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

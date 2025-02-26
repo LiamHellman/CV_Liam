@@ -512,4 +512,235 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initial render of content
   renderContent();
+
+
+});
+
+// Add this to your script.js file
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Create terminal container if it doesn't exist
+  if (!document.getElementById('terminal-container')) {
+    createTerminal();
+  }
+
+  const terminal = document.getElementById('terminal-input');
+  const terminalOutput = document.getElementById('terminal-output');
+  const terminalContainer = document.getElementById('terminal-container');
+  const terminalToggle = document.getElementById('terminal-toggle');
+  const terminalHistory = [];
+  let historyIndex = -1;
+  let isTerminalOpen = false;
+
+  // Toggle terminal visibility
+  terminalToggle.addEventListener('click', function() {
+    isTerminalOpen = !isTerminalOpen;
+    if (isTerminalOpen) {
+      terminalContainer.classList.remove('hidden');
+      terminalContainer.classList.add('flex');
+      setTimeout(() => {
+        terminal.focus();
+      }, 100);
+    } else {
+      terminalContainer.classList.remove('flex');
+      terminalContainer.classList.add('hidden');
+    }
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    // Alt+T to toggle terminal
+    if (e.altKey && e.key === 't') {
+      terminalToggle.click();
+      e.preventDefault();
+    }
+    
+    // Escape to close terminal
+    if (e.key === 'Escape' && isTerminalOpen) {
+      terminalToggle.click();
+      e.preventDefault();
+    }
+  });
+
+  // Terminal commands
+  terminal.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const command = terminal.value.trim();
+      
+      if (command) {
+        terminalHistory.push(command);
+        historyIndex = terminalHistory.length;
+        executeCommand(command);
+        terminal.value = '';
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        terminal.value = terminalHistory[historyIndex];
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex < terminalHistory.length - 1) {
+        historyIndex++;
+        terminal.value = terminalHistory[historyIndex];
+      } else {
+        historyIndex = terminalHistory.length;
+        terminal.value = '';
+      }
+    }
+  });
+
+  // Execute terminal commands
+  function executeCommand(command) {
+    const commandLower = command.toLowerCase();
+    const args = commandLower.split(' ');
+    const cmd = args[0];
+
+    addToTerminalOutput(`<span class="text-green-300">guest@liamhellman</span>:<span class="text-blue-400">~</span>$ ${command}`);
+
+    switch (cmd) {
+      case 'help':
+        showHelp();
+        break;
+      case 'clear':
+      case 'cls':
+        clearTerminal();
+        break;
+      case 'goto':
+      case 'cd':
+        if (args.length < 2) {
+          addToTerminalOutput('Usage: goto [section]');
+          addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
+        } else {
+          navigateToSection(args[1]);
+        }
+        break;
+      case 'ls':
+        listSections();
+        break;
+      case 'whoami':
+        addToTerminalOutput('guest - You are browsing Liam Hellman\'s portfolio');
+        break;
+      case 'exit':
+      case 'quit':
+        terminalToggle.click();
+        break;
+      case 'echo':
+        addToTerminalOutput(command.substring(5));
+        break;
+      case 'date':
+        addToTerminalOutput(new Date().toString());
+        break;
+      default:
+        addToTerminalOutput(`Command not found: ${command}. Type 'help' for available commands.`);
+    }
+  }
+
+  // Create terminal container
+  function createTerminal() {
+    // Create terminal toggle button
+    const toggleButton = document.createElement('button');
+    toggleButton.id = 'terminal-toggle';
+    toggleButton.className = 'fixed bottom-4 right-4 z-50 p-2 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors';
+    toggleButton.innerHTML = '&gt;_';
+    toggleButton.title = 'Toggle Terminal (Alt+T)';
+    document.body.appendChild(toggleButton);
+
+    // Create terminal container
+    const container = document.createElement('div');
+    container.id = 'terminal-container';
+    container.className = 'hidden fixed bottom-16 right-4 w-4/5 md:w-1/2 lg:w-1/3 h-64 bg-black bg-opacity-90 border border-green-400 rounded-md shadow-lg z-40 flex-col p-2 font-mono text-sm';
+    container.style.maxHeight = '50vh';
+    container.style.overflow = 'hidden';
+
+    // Create terminal output area
+    const output = document.createElement('div');
+    output.id = 'terminal-output';
+    output.className = 'flex-grow overflow-y-auto text-green-400 p-1';
+    output.style.maxHeight = 'calc(100% - 30px)';
+    container.appendChild(output);
+
+    // Create input container
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'flex items-center mt-1 text-green-400';
+    
+    const prompt = document.createElement('span');
+    prompt.className = 'mr-1';
+    prompt.innerHTML = '<span class="text-green-300">guest@liamhellman</span>:<span class="text-blue-400">~</span>$ ';
+    inputContainer.appendChild(prompt);
+    
+    const input = document.createElement('input');
+    input.id = 'terminal-input';
+    input.className = 'flex-grow bg-transparent text-green-400 outline-none';
+    input.type = 'text';
+    input.autocomplete = 'off';
+    inputContainer.appendChild(input);
+    
+    container.appendChild(inputContainer);
+    document.body.appendChild(container);
+
+    // Initialize terminal with welcome message
+    addToTerminalOutput('<span class="text-green-300">Welcome to Liam Hellman\'s portfolio terminal!</span>');
+    addToTerminalOutput('Type <span class="text-yellow-300">help</span> for available commands.');
+  }
+
+  // Terminal helper functions
+  function addToTerminalOutput(text) {
+    const line = document.createElement('div');
+    line.className = 'mb-1';
+    line.innerHTML = text;
+    terminalOutput.appendChild(line);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  }
+
+  function clearTerminal() {
+    terminalOutput.innerHTML = '';
+  }
+
+  function showHelp() {
+    addToTerminalOutput('<span class="text-yellow-300">Available commands:</span>');
+    addToTerminalOutput('  <span class="text-blue-400">help</span>       - Show this help message');
+    addToTerminalOutput('  <span class="text-blue-400">clear, cls</span> - Clear terminal output');
+    addToTerminalOutput('  <span class="text-blue-400">goto, cd</span>   - Navigate to a section (e.g., goto about)');
+    addToTerminalOutput('  <span class="text-blue-400">ls</span>         - List available sections');
+    addToTerminalOutput('  <span class="text-blue-400">whoami</span>     - Display current user');
+    addToTerminalOutput('  <span class="text-blue-400">exit, quit</span> - Close the terminal');
+    addToTerminalOutput('  <span class="text-blue-400">date</span>       - Display current date and time');
+    addToTerminalOutput('  <span class="text-blue-400">echo</span>       - Display a message');
+    addToTerminalOutput('');
+    addToTerminalOutput('<span class="text-yellow-300">Keyboard shortcuts:</span>');
+    addToTerminalOutput('  <span class="text-blue-400">Alt+T</span>      - Toggle terminal');
+    addToTerminalOutput('  <span class="text-blue-400">Escape</span>     - Close terminal');
+    addToTerminalOutput('  <span class="text-blue-400">Up/Down</span>    - Command history');
+  }
+
+  function listSections() {
+    addToTerminalOutput('<span class="text-yellow-300">Available sections:</span>');
+    addToTerminalOutput('about       education   experience');
+    addToTerminalOutput('projects    skills      contact');
+  }
+
+  function navigateToSection(section) {
+    const validSections = ['about', 'education', 'experience', 'projects', 'skills', 'contact'];
+    
+    if (validSections.includes(section)) {
+      if (section === 'contact') {
+        window.location.href = 'contact.html';
+        addToTerminalOutput(`Navigating to ${section}...`);
+      } else {
+        const element = document.getElementById(section);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          addToTerminalOutput(`Navigating to ${section}...`);
+        } else {
+          addToTerminalOutput(`Error: Section #${section} not found in the current page.`);
+        }
+      }
+    } else {
+      addToTerminalOutput(`Error: Section "${section}" not found.`);
+      addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
+    }
+  }
 });
