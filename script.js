@@ -516,6 +516,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+
+
+
+
+
+// Updated terminal implementation for embedding in the hero section
+
 document.addEventListener("DOMContentLoaded", function() {
   // Find the hero section and the place to embed the terminal
   const heroSection = document.getElementById('about');
@@ -538,7 +545,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Create terminal container
     const terminal = document.createElement('div');
     terminal.id = 'embedded-terminal';
-    terminal.className = 'w-full mb-6 font-mono text-sm';
+    terminal.className = 'w-full mb-6 font-mono text-sm relative z-20';
     
     // Create terminal header
     const header = document.createElement('div');
@@ -651,9 +658,18 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
 
-    // Focus terminal on click
-    document.getElementById('embedded-terminal').addEventListener('click', () => {
+    // Focus terminal on click - more robust event handling
+    document.getElementById('embedded-terminal').addEventListener('click', function(e) {
+      e.stopPropagation();
       terminal.focus();
+    }, true);
+    
+    // Make sure the terminal container is properly clickable
+    document.querySelectorAll('#embedded-terminal, #embedded-terminal *').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        terminal.focus();
+      }, true);
     });
 
     // Execute terminal commands
@@ -851,4 +867,45 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   }
+});
+
+
+
+// Fix terminal clickability issues
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait for the terminal to be fully created
+  setTimeout(() => {
+    const terminal = document.getElementById('embedded-terminal');
+    const input = document.getElementById('embedded-terminal-input');
+    
+    if (terminal && input) {
+      // Ensure the terminal and its children have proper z-index and pointer events
+      terminal.style.position = 'relative';
+      terminal.style.zIndex = '30';
+      terminal.style.pointerEvents = 'auto';
+      
+      // Add a direct click handler to focus the input
+      terminal.onclick = function(e) {
+        input.focus();
+        e.stopPropagation();
+      };
+      
+      // Handle clicks on all terminal elements
+      const terminalElements = terminal.querySelectorAll('*');
+      terminalElements.forEach(element => {
+        element.style.pointerEvents = 'auto';
+        element.onclick = function(e) {
+          input.focus();
+          e.stopPropagation();
+        };
+      });
+      
+      // Focus the input on page load
+      input.focus();
+      
+      console.log('Terminal click handlers applied');
+    } else {
+      console.log('Terminal elements not found');
+    }
+  }, 1000); // Wait a second for any animations to complete
 });

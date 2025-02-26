@@ -265,6 +265,9 @@ html, body {
   -webkit-backdrop-filter: blur(5px);
 }
 
+
+
+/* Embedded Terminal Styles */
 /* Add these styles to your style.css file */
 
 /* Embedded Terminal Styles */
@@ -272,6 +275,9 @@ html, body {
   width: 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   cursor: text;
+  position: relative;
+  z-index: 20;
+  pointer-events: auto !important;
 }
 
 #embedded-terminal-output {
@@ -348,4 +354,17 @@ html, body {
   #embedded-terminal-output {
     height: 130px;
   }
+}
+
+/* Fix for clickability */
+#embedded-terminal *,
+#embedded-terminal-output,
+#embedded-terminal-input {
+  pointer-events: auto !important;
+}
+
+/* Make sure input is properly accessible */
+#embedded-terminal-input {
+  position: relative;
+  z-index: 25;
 }
