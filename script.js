@@ -45,10 +45,12 @@ document.addEventListener("DOMContentLoaded", function () {
       sidebar.classList.remove("-translate-x-full");
       sidebarOverlay.classList.remove("hidden");
       document.body.classList.add("sidebar-open");
+      sidebarToggle.classList.add("hidden"); // Hide the toggle button when sidebar is open
     } else {
       sidebar.classList.add("-translate-x-full");
       sidebarOverlay.classList.add("hidden");
       document.body.classList.remove("sidebar-open");
+      sidebarToggle.classList.remove("hidden"); // Show the toggle button when sidebar is closed
     }
   }
 
@@ -58,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     sidebar.classList.add("-translate-x-full");
     sidebarOverlay.classList.add("hidden");
     document.body.classList.remove("sidebar-open");
+    sidebarToggle.classList.remove("hidden"); // Show the toggle button when sidebar is closed
   }
 
   // Translations and content
