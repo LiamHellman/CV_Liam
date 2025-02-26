@@ -516,231 +516,339 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-// Add this to your script.js file
-
 document.addEventListener("DOMContentLoaded", function() {
-  // Create terminal container if it doesn't exist
-  if (!document.getElementById('terminal-container')) {
-    createTerminal();
+  // Find the hero section and the place to embed the terminal
+  const heroSection = document.getElementById('about');
+  if (!heroSection) return; // Exit if we're not on the homepage
+  
+  // Find the container where we'll embed the terminal
+  const terminalContainer = heroSection.querySelector('.max-w-2xl');
+  if (!terminalContainer) return;
+  
+  // Remove the existing fake terminal prompt
+  const fakePrompt = terminalContainer.querySelector('p.text-sm.mb-4');
+  if (fakePrompt) {
+    fakePrompt.remove();
   }
-
-  const terminal = document.getElementById('terminal-input');
-  const terminalOutput = document.getElementById('terminal-output');
-  const terminalContainer = document.getElementById('terminal-container');
-  const terminalToggle = document.getElementById('terminal-toggle');
-  const terminalHistory = [];
-  let historyIndex = -1;
-  let isTerminalOpen = false;
-
-  // Toggle terminal visibility
-  terminalToggle.addEventListener('click', function() {
-    isTerminalOpen = !isTerminalOpen;
-    if (isTerminalOpen) {
-      terminalContainer.classList.remove('hidden');
-      terminalContainer.classList.add('flex');
-      setTimeout(() => {
-        terminal.focus();
-      }, 100);
-    } else {
-      terminalContainer.classList.remove('flex');
-      terminalContainer.classList.add('hidden');
-    }
-  });
-
-  // Keyboard shortcuts
-  document.addEventListener('keydown', function(e) {
-    // Alt+T to toggle terminal
-    if (e.altKey && e.key === 't') {
-      terminalToggle.click();
-      e.preventDefault();
-    }
-    
-    // Escape to close terminal
-    if (e.key === 'Escape' && isTerminalOpen) {
-      terminalToggle.click();
-      e.preventDefault();
-    }
-  });
-
-  // Terminal commands
-  terminal.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const command = terminal.value.trim();
-      
-      if (command) {
-        terminalHistory.push(command);
-        historyIndex = terminalHistory.length;
-        executeCommand(command);
-        terminal.value = '';
-      }
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (historyIndex > 0) {
-        historyIndex--;
-        terminal.value = terminalHistory[historyIndex];
-      }
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyIndex < terminalHistory.length - 1) {
-        historyIndex++;
-        terminal.value = terminalHistory[historyIndex];
-      } else {
-        historyIndex = terminalHistory.length;
-        terminal.value = '';
-      }
-    }
-  });
-
-  // Execute terminal commands
-  function executeCommand(command) {
-    const commandLower = command.toLowerCase();
-    const args = commandLower.split(' ');
-    const cmd = args[0];
-
-    addToTerminalOutput(`<span class="text-green-300">guest@liamhellman</span>:<span class="text-blue-400">~</span>$ ${command}`);
-
-    switch (cmd) {
-      case 'help':
-        showHelp();
-        break;
-      case 'clear':
-      case 'cls':
-        clearTerminal();
-        break;
-      case 'goto':
-      case 'cd':
-        if (args.length < 2) {
-          addToTerminalOutput('Usage: goto [section]');
-          addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
-        } else {
-          navigateToSection(args[1]);
-        }
-        break;
-      case 'ls':
-        listSections();
-        break;
-      case 'whoami':
-        addToTerminalOutput('guest - You are browsing Liam Hellman\'s portfolio');
-        break;
-      case 'exit':
-      case 'quit':
-        terminalToggle.click();
-        break;
-      case 'echo':
-        addToTerminalOutput(command.substring(5));
-        break;
-      case 'date':
-        addToTerminalOutput(new Date().toString());
-        break;
-      default:
-        addToTerminalOutput(`Command not found: ${command}. Type 'help' for available commands.`);
-    }
-  }
-
-  // Create terminal container
-  function createTerminal() {
-    // Create terminal toggle button
-    const toggleButton = document.createElement('button');
-    toggleButton.id = 'terminal-toggle';
-    toggleButton.className = 'fixed bottom-4 right-4 z-50 p-2 bg-gray-800 text-green-400 rounded-full hover:bg-gray-700 transition-colors';
-    toggleButton.innerHTML = '&gt;_';
-    toggleButton.title = 'Toggle Terminal (Alt+T)';
-    document.body.appendChild(toggleButton);
-
+  
+  // Create and insert the embedded terminal
+  createEmbeddedTerminal(terminalContainer);
+  
+  function createEmbeddedTerminal(container) {
     // Create terminal container
-    const container = document.createElement('div');
-    container.id = 'terminal-container';
-    container.className = 'hidden fixed bottom-16 right-4 w-4/5 md:w-1/2 lg:w-1/3 h-64 bg-black bg-opacity-90 border border-green-400 rounded-md shadow-lg z-40 flex-col p-2 font-mono text-sm';
-    container.style.maxHeight = '50vh';
-    container.style.overflow = 'hidden';
-
-    // Create terminal output area
+    const terminal = document.createElement('div');
+    terminal.id = 'embedded-terminal';
+    terminal.className = 'w-full mb-6 font-mono text-sm';
+    
+    // Create terminal header
+    const header = document.createElement('div');
+    header.className = 'flex items-center justify-between p-2 bg-gray-800 border-t border-l border-r border-green-400 rounded-t-md';
+    
+    const title = document.createElement('div');
+    title.className = 'text-green-300 text-xs';
+    title.textContent = 'resume-terminal';
+    
+    const controls = document.createElement('div');
+    controls.className = 'flex space-x-1';
+    
+    ['#FF5F56', '#FFBD2E', '#27C93F'].forEach(color => {
+      const circle = document.createElement('div');
+      circle.className = 'w-2 h-2 rounded-full';
+      circle.style.backgroundColor = color;
+      controls.appendChild(circle);
+    });
+    
+    header.appendChild(title);
+    header.appendChild(controls);
+    terminal.appendChild(header);
+    
+    // Create terminal body
+    const body = document.createElement('div');
+    body.className = 'p-3 bg-black border-l border-r border-green-400';
+    
+    // Create terminal output
     const output = document.createElement('div');
-    output.id = 'terminal-output';
-    output.className = 'flex-grow overflow-y-auto text-green-400 p-1';
-    output.style.maxHeight = 'calc(100% - 30px)';
-    container.appendChild(output);
-
-    // Create input container
+    output.id = 'embedded-terminal-output';
+    output.className = 'text-green-400 mb-2 h-32 overflow-y-auto';
+    body.appendChild(output);
+    
+    // Create input area
     const inputContainer = document.createElement('div');
-    inputContainer.className = 'flex items-center mt-1 text-green-400';
+    inputContainer.className = 'flex items-center';
     
     const prompt = document.createElement('span');
     prompt.className = 'mr-1';
-    prompt.innerHTML = '<span class="text-green-300">guest@liamhellman</span>:<span class="text-blue-400">~</span>$ ';
+    prompt.innerHTML = '<span class="text-green-300">liam@portfolio</span>:<span class="text-blue-400">~</span>$ ';
     inputContainer.appendChild(prompt);
     
     const input = document.createElement('input');
-    input.id = 'terminal-input';
+    input.id = 'embedded-terminal-input';
     input.className = 'flex-grow bg-transparent text-green-400 outline-none';
     input.type = 'text';
     input.autocomplete = 'off';
+    input.placeholder = 'Type a command (try help)';
     inputContainer.appendChild(input);
     
-    container.appendChild(inputContainer);
-    document.body.appendChild(container);
-
-    // Initialize terminal with welcome message
-    addToTerminalOutput('<span class="text-green-300">Welcome to Liam Hellman\'s portfolio terminal!</span>');
-    addToTerminalOutput('Type <span class="text-yellow-300">help</span> for available commands.');
-  }
-
-  // Terminal helper functions
-  function addToTerminalOutput(text) {
-    const line = document.createElement('div');
-    line.className = 'mb-1';
-    line.innerHTML = text;
-    terminalOutput.appendChild(line);
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-  }
-
-  function clearTerminal() {
-    terminalOutput.innerHTML = '';
-  }
-
-  function showHelp() {
-    addToTerminalOutput('<span class="text-yellow-300">Available commands:</span>');
-    addToTerminalOutput('  <span class="text-blue-400">help</span>       - Show this help message');
-    addToTerminalOutput('  <span class="text-blue-400">clear, cls</span> - Clear terminal output');
-    addToTerminalOutput('  <span class="text-blue-400">goto, cd</span>   - Navigate to a section (e.g., goto about)');
-    addToTerminalOutput('  <span class="text-blue-400">ls</span>         - List available sections');
-    addToTerminalOutput('  <span class="text-blue-400">whoami</span>     - Display current user');
-    addToTerminalOutput('  <span class="text-blue-400">exit, quit</span> - Close the terminal');
-    addToTerminalOutput('  <span class="text-blue-400">date</span>       - Display current date and time');
-    addToTerminalOutput('  <span class="text-blue-400">echo</span>       - Display a message');
-    addToTerminalOutput('');
-    addToTerminalOutput('<span class="text-yellow-300">Keyboard shortcuts:</span>');
-    addToTerminalOutput('  <span class="text-blue-400">Alt+T</span>      - Toggle terminal');
-    addToTerminalOutput('  <span class="text-blue-400">Escape</span>     - Close terminal');
-    addToTerminalOutput('  <span class="text-blue-400">Up/Down</span>    - Command history');
-  }
-
-  function listSections() {
-    addToTerminalOutput('<span class="text-yellow-300">Available sections:</span>');
-    addToTerminalOutput('about       education   experience');
-    addToTerminalOutput('projects    skills      contact');
-  }
-
-  function navigateToSection(section) {
-    const validSections = ['about', 'education', 'experience', 'projects', 'skills', 'contact'];
+    body.appendChild(inputContainer);
     
-    if (validSections.includes(section)) {
-      if (section === 'contact') {
-        window.location.href = 'contact.html';
-        addToTerminalOutput(`Navigating to ${section}...`);
-      } else {
-        const element = document.getElementById(section);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-          addToTerminalOutput(`Navigating to ${section}...`);
+    // Create terminal footer
+    const footer = document.createElement('div');
+    footer.className = 'p-1 text-right text-xs text-green-300 bg-gray-800 border-b border-l border-r border-green-400 rounded-b-md';
+    footer.textContent = 'Type "help" for commands';
+    
+    terminal.appendChild(header);
+    terminal.appendChild(body);
+    terminal.appendChild(footer);
+    
+    // Insert terminal at the top of the container
+    container.insertBefore(terminal, container.firstChild);
+    
+    // Initialize terminal functionality
+    initializeTerminal();
+  }
+  
+  function initializeTerminal() {
+    const terminal = document.getElementById('embedded-terminal-input');
+    const terminalOutput = document.getElementById('embedded-terminal-output');
+    const terminalHistory = [];
+    let historyIndex = -1;
+
+    // Show welcome message
+    addToTerminalOutput('<span class="text-yellow-300">Welcome to Liam Hellman\'s portfolio terminal!</span>');
+    
+    // Auto-execute intro command after a brief delay
+    setTimeout(() => {
+      executeCommand('cat introduction.txt');
+    }, 500);
+
+    // Terminal input handling
+    terminal.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const command = terminal.value.trim();
+        
+        if (command) {
+          terminalHistory.push(command);
+          historyIndex = terminalHistory.length;
+          executeCommand(command);
+          terminal.value = '';
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          historyIndex--;
+          terminal.value = terminalHistory[historyIndex];
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex < terminalHistory.length - 1) {
+          historyIndex++;
+          terminal.value = terminalHistory[historyIndex];
         } else {
-          addToTerminalOutput(`Error: Section #${section} not found in the current page.`);
+          historyIndex = terminalHistory.length;
+          terminal.value = '';
         }
       }
-    } else {
-      addToTerminalOutput(`Error: Section "${section}" not found.`);
-      addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
+    });
+
+    // Focus terminal on click
+    document.getElementById('embedded-terminal').addEventListener('click', () => {
+      terminal.focus();
+    });
+
+    // Execute terminal commands
+    function executeCommand(command) {
+      const commandLower = command.toLowerCase();
+      const args = commandLower.split(' ');
+      const cmd = args[0];
+
+      addToTerminalOutput(`<span class="text-green-300">liam@portfolio</span>:<span class="text-blue-400">~</span>$ ${command}`);
+
+      switch (cmd) {
+        case 'help':
+          showHelp();
+          break;
+        case 'clear':
+        case 'cls':
+          clearTerminal();
+          break;
+        case 'goto':
+        case 'cd':
+          if (args.length < 2) {
+            addToTerminalOutput('Usage: goto [section]');
+            addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
+          } else {
+            navigateToSection(args[1]);
+          }
+          break;
+        case 'ls':
+          listSections();
+          break;
+        case 'cat':
+          if (args.length < 2) {
+            addToTerminalOutput('Usage: cat [filename]');
+          } else if (args[1] === 'introduction.txt') {
+            showIntroduction();
+          } else {
+            addToTerminalOutput(`File not found: ${args[1]}`);
+          }
+          break;
+        case 'whoami':
+          addToTerminalOutput('visitor - You are browsing Liam Hellman\'s portfolio');
+          break;
+        case 'date':
+          addToTerminalOutput(new Date().toString());
+          break;
+        case 'skills':
+          showSkills();
+          break;
+        case 'project':
+        case 'projects':
+          if (args.length < 2) {
+            listProjects();
+          } else {
+            showProject(args[1]);
+          }
+          break;
+        default:
+          addToTerminalOutput(`Command not found: ${command}. Type 'help' for available commands.`);
+      }
+    }
+
+    // Terminal helper functions
+    function addToTerminalOutput(text) {
+      const line = document.createElement('div');
+      line.className = 'mb-1';
+      line.innerHTML = text;
+      terminalOutput.appendChild(line);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+
+    function clearTerminal() {
+      terminalOutput.innerHTML = '';
+    }
+
+    function showHelp() {
+      addToTerminalOutput('<span class="text-yellow-300">Available commands:</span>');
+      addToTerminalOutput('  <span class="text-blue-400">help</span>           - Show this help message');
+      addToTerminalOutput('  <span class="text-blue-400">clear, cls</span>     - Clear terminal output');
+      addToTerminalOutput('  <span class="text-blue-400">goto, cd</span>       - Navigate to a section (e.g., goto about)');
+      addToTerminalOutput('  <span class="text-blue-400">ls</span>             - List available sections');
+      addToTerminalOutput('  <span class="text-blue-400">cat</span>            - Display file contents (try: cat introduction.txt)');
+      addToTerminalOutput('  <span class="text-blue-400">whoami</span>         - Display current user');
+      addToTerminalOutput('  <span class="text-blue-400">date</span>           - Display current date and time');
+      addToTerminalOutput('  <span class="text-blue-400">skills</span>         - Show my skills');
+      addToTerminalOutput('  <span class="text-blue-400">projects</span>       - List all projects');
+      addToTerminalOutput('  <span class="text-blue-400">project [name]</span> - Show specific project details');
+    }
+
+    function listSections() {
+      addToTerminalOutput('<span class="text-yellow-300">Available sections:</span>');
+      addToTerminalOutput('about       education   experience');
+      addToTerminalOutput('projects    skills      contact');
+    }
+
+    function navigateToSection(section) {
+      const validSections = ['about', 'education', 'experience', 'projects', 'skills', 'contact'];
+      
+      if (validSections.includes(section)) {
+        if (section === 'contact') {
+          window.location.href = 'contact.html';
+          addToTerminalOutput(`Navigating to ${section}...`);
+        } else {
+          const element = document.getElementById(section);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            addToTerminalOutput(`Navigating to ${section}...`);
+          } else {
+            addToTerminalOutput(`Error: Section #${section} not found in the current page.`);
+          }
+        }
+      } else {
+        addToTerminalOutput(`Error: Section "${section}" not found.`);
+        addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
+      }
+    }
+
+    function showIntroduction() {
+      // Fetch the hero content and display it in the terminal
+      const name = document.getElementById('heroName').innerText || content[language].personalInfo.name;
+      const title = document.getElementById('heroTitle').innerText || content[language].personalInfo.title;
+      const location = document.getElementById('heroLocation').innerText || content[language].personalInfo.location;
+      
+      addToTerminalOutput('<span class="text-yellow-300">// Introduction.txt</span>');
+      addToTerminalOutput(`<span class="text-green-400 font-bold">${name}</span>`);
+      addToTerminalOutput(`<span class="text-green-300">${title}</span>`);
+      addToTerminalOutput(`<span class="text-green-300">${location}</span>`);
+      addToTerminalOutput('');
+      addToTerminalOutput('Welcome to my interactive portfolio! Use the terminal to navigate through my experience and projects.');
+    }
+
+    function showSkills() {
+      // Pull skill data from the content object
+      const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
+      const skillsData = window.content?.[language]?.skills;
+      
+      if (skillsData) {
+        addToTerminalOutput('<span class="text-yellow-300">Technical Skills:</span>');
+        addToTerminalOutput('<span class="text-blue-400">Programming:</span> ' + skillsData.technical.programming.join(', '));
+        addToTerminalOutput('<span class="text-blue-400">Frameworks:</span> ' + skillsData.technical.frameworks.join(', '));
+        addToTerminalOutput('<span class="text-blue-400">Tools:</span> ' + skillsData.technical.tools.join(', '));
+        addToTerminalOutput('<span class="text-blue-400">Databases:</span> ' + skillsData.technical.databases.join(', '));
+        
+        addToTerminalOutput('');
+        addToTerminalOutput('<span class="text-yellow-300">Languages:</span> ' + skillsData.languages.join(', '));
+        addToTerminalOutput('<span class="text-yellow-300">Key Qualities:</span> ' + skillsData.qualities.join(', '));
+      } else {
+        addToTerminalOutput('Skills data not available. Navigate to the Skills section for more information.');
+        addToTerminalOutput('Type: <span class="text-blue-400">goto skills</span>');
+      }
+    }
+
+    function listProjects() {
+      // Pull project data from the content object
+      const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
+      const projectsData = window.content?.[language]?.projects;
+      
+      if (projectsData) {
+        addToTerminalOutput('<span class="text-yellow-300">Projects:</span>');
+        projectsData.forEach((project, index) => {
+          addToTerminalOutput(`<span class="text-blue-400">${index + 1}. ${project.title}</span> - ${project.date}`);
+        });
+        addToTerminalOutput('');
+        addToTerminalOutput('For details on a specific project, type:');
+        addToTerminalOutput('<span class="text-blue-400">project [name]</span> (e.g., project roast-me)');
+      } else {
+        addToTerminalOutput('Projects data not available. Navigate to the Projects section for more information.');
+        addToTerminalOutput('Type: <span class="text-blue-400">goto projects</span>');
+      }
+    }
+
+    function showProject(projectName) {
+      // Pull project data from the content object
+      const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
+      const projectsData = window.content?.[language]?.projects;
+      
+      if (projectsData) {
+        const project = projectsData.find(p => p.title.toLowerCase().includes(projectName));
+        
+        if (project) {
+          addToTerminalOutput(`<span class="text-yellow-300">${project.title}</span> - ${project.date}`);
+          addToTerminalOutput(project.description);
+          addToTerminalOutput('');
+          addToTerminalOutput('<span class="text-blue-400">Technologies:</span> ' + project.technologies.join(', '));
+          addToTerminalOutput('');
+          addToTerminalOutput('<span class="text-blue-400">Key features:</span>');
+          project.points.forEach(point => {
+            addToTerminalOutput(`• ${point}`);
+          });
+        } else {
+          addToTerminalOutput(`Project "${projectName}" not found. Type <span class="text-blue-400">projects</span> to see all projects.`);
+        }
+      } else {
+        addToTerminalOutput('Projects data not available. Navigate to the Projects section for more information.');
+        addToTerminalOutput('Type: <span class="text-blue-400">goto projects</span>');
+      }
     }
   }
 });
