@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Create overlay element
+
+    console.log("Animation script loaded");
+    window.debugTerminal = true;
     const overlay = document.createElement('div');
     overlay.id = 'loading-overlay';
     overlay.style.position = 'fixed';
