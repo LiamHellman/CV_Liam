@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Create overlay element
+    
 
     console.log("Animation script loaded");
     window.debugTerminal = true;
@@ -102,7 +103,86 @@ document.addEventListener("DOMContentLoaded", function() {
       { text: "Generating content...", delay: 800 },
       { text: "Portfolio system ready!", delay: 500 }
     ];
-    
+    // Skip animation functionality
+let animationSkipped = false;
+
+// Function to skip the animation
+function skipAnimation() {
+  if (animationSkipped) return; // Prevent multiple skips
+  
+  console.log("Animation skipped by user");
+  animationSkipped = true;
+  
+  // Find the overlay
+  const overlay = document.getElementById('loading-overlay');
+  if (!overlay) return;
+  
+  // Stop any ongoing animations
+  clearAllTimeouts();
+  
+  // Fade out the overlay
+  overlay.style.opacity = '0';
+  
+  // Remove the overlay after transition
+  setTimeout(() => {
+    overlay.remove();
+    // Immediately ensure terminal is loaded
+    ensureTerminalLoaded();
+  }, 500);
+}
+
+// Clear all active timeouts (to stop animation sequences)
+function clearAllTimeouts() {
+  // Get the highest timeout id
+  const highestTimeoutId = setTimeout(() => {}, 0);
+  
+  // Clear all timeouts
+  for (let i = 0; i < highestTimeoutId; i++) {
+    clearTimeout(i);
+  }
+}
+
+// Add keyboard listener for Enter key
+document.addEventListener('keydown', function(e) {
+  // Check if Enter was pressed and overlay is still visible
+  if (e.key === 'Enter' && document.getElementById('loading-overlay')) {
+    skipAnimation();
+  }
+});
+
+// Add a skip button to the overlay
+setTimeout(() => {
+  const overlay = document.getElementById('loading-overlay');
+  if (!overlay) return;
+  
+  const skipButton = document.createElement('button');
+  skipButton.textContent = 'Press ENTER to skip';
+  skipButton.style.position = 'absolute';
+  skipButton.style.bottom = '30px';
+  skipButton.style.left = '50%';
+  skipButton.style.transform = 'translateX(-50%)';
+  skipButton.style.backgroundColor = 'transparent';
+  skipButton.style.border = '1px solid #48bb78';
+  skipButton.style.color = '#48bb78';
+  skipButton.style.padding = '8px 16px';
+  skipButton.style.borderRadius = '4px';
+  skipButton.style.cursor = 'pointer';
+  skipButton.style.fontFamily = 'monospace';
+  skipButton.style.fontSize = '14px';
+  skipButton.style.opacity = '0';
+  skipButton.style.transition = 'opacity 0.5s ease';
+  
+  skipButton.addEventListener('click', skipAnimation);
+  
+  overlay.appendChild(skipButton);
+  
+  // Show the button after a delay
+  setTimeout(() => {
+    skipButton.style.opacity = '1';
+  }, 1500);
+}, 500);
+
+
     // Typing effect function
     function typeText(element, text, speed = 30) {
       return new Promise(resolve => {
@@ -127,12 +207,14 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Run animation sequence
     async function runAnimation() {
+      if (animationSkipped) return;  
       const output = document.getElementById('loading-terminal-output');
       const progress = document.getElementById('loading-progress');
       
       let progressValue = 0;
       
       for (let i = 0; i < textSequence.length; i++) {
+        if (animationSkipped) break;
         await typeText(output, textSequence[i].text);
         await new Promise(resolve => setTimeout(resolve, textSequence[i].delay));
         
