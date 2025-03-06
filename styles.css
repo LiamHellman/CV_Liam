@@ -52,9 +52,14 @@ body.sidebar-open {
   padding-left: 256px; /* Adjust based on sidebar width */
 }
 
-/* Particles canvas behind content */
 #particles-js {
-  background-color: #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: black; /* Match your site background */
 }
 
 /* Ensure anchor scrolling leaves space for fixed nav */
@@ -381,5 +386,38 @@ html, body {
 #embedded-terminal-input {
   position: relative;
   z-index: 25;
+}
+
+@keyframes particleGlow {
+  0% {
+    filter: blur(0px) brightness(1);
+  }
+  50% {
+    filter: blur(3px) brightness(1.8);
+  }
+  100% {
+    filter: blur(0px) brightness(1);
+  }
+}
+
+.particle-glow {
+  animation: particleGlow 5s ease-in-out infinite;
+}
+
+/* Make content appear above particles */
+.min-h-screen, #terminal, #education, #experience, #projects, #skills {
+  position: relative;
+  z-index: 10;
+}
+
+/* Ensure particles container doesn't block interactions */
+#particles-js canvas {
+  display: block;
+  pointer-events: none; /* Allow clicks to pass through to elements below */
+}
+
+/* For interactivity, make certain parts of the particles clickable */
+.particles-js-click-area {
+  pointer-events: auto;
 }
 

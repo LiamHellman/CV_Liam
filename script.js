@@ -1,3 +1,132 @@
+function initParticles() {
+  if (typeof particlesJS !== 'undefined') {
+    // Initialize particles with your JSON configuration
+    fetch('particles.json')
+      .then(response => response.json())
+      .then(particlesConfig => {
+        particlesJS('particles-js', particlesConfig);
+        console.log('Particles.js initialized with custom config');
+        
+        // Add a glow effect to the particles container
+        const particlesElement = document.getElementById('particles-js');
+        if (particlesElement) {
+          particlesElement.classList.add('particle-glow');
+          // Ensure particles container is visible and spans full viewport
+          particlesElement.style.opacity = '1';
+          particlesElement.style.width = '100%';
+          particlesElement.style.height = '100%';
+          particlesElement.style.position = 'fixed';
+          particlesElement.style.top = '0';
+          particlesElement.style.left = '0';
+          particlesElement.style.zIndex = '0';
+        }
+      })
+      .catch(error => {
+        console.error('Failed to load particles config:', error);
+        // Fallback to basic particles config
+        initBasicParticles();
+      });
+  } else {
+    console.error('particlesJS is not defined!');
+  }
+}
+
+// Fallback function with inline configuration
+function initBasicParticles() {
+  if (typeof particlesJS !== 'undefined') {
+    particlesJS('particles-js', {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#00FFFF"
+        },
+        "shape": {
+          "type": "circle"
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 2,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#00FFFF",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2,
+          "direction": "none",
+          "random": true,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": true,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 140,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          }
+        }
+      },
+      "retina_detect": true
+    });
+    console.log('Basic particles.js initialized');
+  }
+}
+
+// Modify the existing document.addEventListener("DOMContentLoaded") block
 document.addEventListener("DOMContentLoaded", function() {
   // Original content should be hidden initially
   const mainSections = document.querySelectorAll('#terminal, #education, #experience, #projects, #skills');
@@ -9,16 +138,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
   
-  // Add particle glow effect once loading is complete
-  const particlesElement = document.getElementById('particles-js');
-  if (particlesElement) {
-    particlesElement.classList.add('particle-glow');
-  }
-  
   // Wait for loading overlay to finish and remove
   const checkLoaderRemoved = setInterval(() => {
     if (!document.getElementById('loading-overlay')) {
       clearInterval(checkLoaderRemoved);
+      
+      // Initialize particles after loading animation completes
+      initParticles();
       
       // Sequence the reveal of each section with slight delays
       let delay = 300;
@@ -58,6 +184,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }, 100);
 });
+      
 
 // Enhanced particles initialization with more dynamic settings
 document.addEventListener("DOMContentLoaded", function() {

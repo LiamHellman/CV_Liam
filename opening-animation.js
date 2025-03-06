@@ -134,12 +134,7 @@ function skipAnimation() {
     }
   });
   
-  // Ensure particles are visible
-  const particlesElement = document.getElementById('particles-js');
-  if (particlesElement) {
-    particlesElement.style.opacity = "1";
-    particlesElement.classList.add('particle-glow');
-  }
+  initializeParticles();
   
   // Fade out the overlay
   overlay.style.opacity = '0';
@@ -156,7 +151,7 @@ function skipAnimation() {
     if (typeof ensureTerminalLoaded === 'function') {
       ensureTerminalLoaded();
     } else {
-      console.error("ensureTerminalLoaded function not found!");
+      console.log("ensureTerminalLoaded function not found!");
       // Backup terminal loading method
       loadTerminalBackup();
     }
@@ -168,6 +163,30 @@ function skipAnimation() {
     }
   }, 500);
 }
+
+// Add this function to opening-animation.js
+function initializeParticles() {
+  const particlesElement = document.getElementById('particles-js');
+  if (particlesElement) {
+    particlesElement.style.opacity = "1";
+    particlesElement.classList.add('particle-glow');
+    
+    // Ensure particles are properly initialized
+    if (typeof particlesJS !== 'undefined') {
+      if (typeof window.initParticles === 'function') {
+        // Use the function from script.js if available
+        window.initParticles();
+      } else {
+        // Otherwise initialize with the particles.json file
+        particlesJS.load('particles-js', 'particles.json', function() {
+          console.log('Particles.js loaded from animation skip');
+        });
+      }
+    }
+  }
+}
+    
+
 
 // Backup method to load terminal
 function loadTerminalBackup() {
@@ -296,6 +315,9 @@ setTimeout(() => {
       
       // Add matrix rain effect to the overlay before fading out
       createMatrixRain(overlay);
+      
+      // Initialize particles
+      initializeParticles();
       
       // Fade out and remove overlay
       await new Promise(resolve => setTimeout(resolve, 1000));
