@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ];
     // Skip animation functionality
 let animationSkipped = false;
+let globalAnimationComplete = false;
 
 // Function to skip the animation
 function skipAnimation() {
@@ -117,8 +118,28 @@ function skipAnimation() {
   const overlay = document.getElementById('loading-overlay');
   if (!overlay) return;
   
-  // Stop any ongoing animations
-  clearAllTimeouts();
+  // Stop any ongoing animations and clear all timeouts
+  const highestTimeoutId = setTimeout(() => {}, 0);
+  for (let i = 0; i < highestTimeoutId; i++) {
+    clearTimeout(i);
+  }
+  
+  // Make sure all main content is visible
+  const mainSections = document.querySelectorAll('#terminal, #education, #experience, #projects, #skills');
+  mainSections.forEach(section => {
+    if (section) {
+      section.style.opacity = "1";
+      section.style.transition = "opacity 0.8s ease-out";
+      section.classList.add('content-enter');
+    }
+  });
+  
+  // Ensure particles are visible
+  const particlesElement = document.getElementById('particles-js');
+  if (particlesElement) {
+    particlesElement.style.opacity = "1";
+    particlesElement.classList.add('particle-glow');
+  }
   
   // Fade out the overlay
   overlay.style.opacity = '0';
@@ -126,26 +147,58 @@ function skipAnimation() {
   // Remove the overlay after transition
   setTimeout(() => {
     overlay.remove();
-    // Immediately ensure terminal is loaded
-    ensureTerminalLoaded();
+    
+    // Immediately load terminal and content
+    console.log("Animation skipped - loading terminal immediately");
+    globalAnimationComplete = true;
+    
+    // Force terminal to load
+    if (typeof ensureTerminalLoaded === 'function') {
+      ensureTerminalLoaded();
+    } else {
+      console.error("ensureTerminalLoaded function not found!");
+      // Backup terminal loading method
+      loadTerminalBackup();
+    }
+    
+    // Make sure sidebar is functional
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    if (sidebarToggle) {
+      sidebarToggle.style.display = "block";
+    }
   }, 500);
 }
 
-// Clear all active timeouts (to stop animation sequences)
-function clearAllTimeouts() {
-  // Get the highest timeout id
-  const highestTimeoutId = setTimeout(() => {}, 0);
+// Backup method to load terminal
+function loadTerminalBackup() {
+  console.log("Using backup terminal loading method");
   
-  // Clear all timeouts
-  for (let i = 0; i < highestTimeoutId; i++) {
-    clearTimeout(i);
+  // Find the terminal container
+  const terminalSection = document.getElementById('terminal');
+  if (!terminalSection) return;
+  
+  const terminalContainer = terminalSection.querySelector('.max-w-2xl');
+  if (!terminalContainer) return;
+  
+  // Check if embedded terminal already exists
+  const existingTerminal = document.getElementById('embedded-terminal');
+  if (existingTerminal) {
+    existingTerminal.style.opacity = "1";
+    existingTerminal.style.transform = "scale(1)";
+    return;
+  }
+  
+  // Call the original terminal initialization function if it exists
+  if (typeof createEmbeddedTerminal === 'function') {
+    createEmbeddedTerminal(terminalContainer);
   }
 }
 
-// Add keyboard listener for Enter key
-document.addEventListener('keydown', function(e) {
+// Add keyboard listener for Enter key - globally available
+window.addEventListener('keydown', function(e) {
   // Check if Enter was pressed and overlay is still visible
   if (e.key === 'Enter' && document.getElementById('loading-overlay')) {
+    console.log("Enter key pressed - skipping animation");
     skipAnimation();
   }
 });
@@ -155,13 +208,15 @@ setTimeout(() => {
   const overlay = document.getElementById('loading-overlay');
   if (!overlay) return;
   
+  // Create skip button
   const skipButton = document.createElement('button');
+  skipButton.id = 'skip-animation-button';
   skipButton.textContent = 'Press ENTER to skip';
   skipButton.style.position = 'absolute';
   skipButton.style.bottom = '30px';
   skipButton.style.left = '50%';
   skipButton.style.transform = 'translateX(-50%)';
-  skipButton.style.backgroundColor = 'transparent';
+  skipButton.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
   skipButton.style.border = '1px solid #48bb78';
   skipButton.style.color = '#48bb78';
   skipButton.style.padding = '8px 16px';
@@ -170,10 +225,26 @@ setTimeout(() => {
   skipButton.style.fontFamily = 'monospace';
   skipButton.style.fontSize = '14px';
   skipButton.style.opacity = '0';
-  skipButton.style.transition = 'opacity 0.5s ease';
+  skipButton.style.transition = 'opacity 0.5s ease, background-color 0.3s ease';
+  skipButton.style.zIndex = '10000';
   
-  skipButton.addEventListener('click', skipAnimation);
+  // Add hover effect
+  skipButton.addEventListener('mouseover', function() {
+    this.style.backgroundColor = 'rgba(72, 187, 120, 0.2)';
+  });
   
+  skipButton.addEventListener('mouseout', function() {
+    this.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+  });
+  
+  // Add click handler
+  skipButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    skipAnimation();
+  });
+  
+  // Add button to overlay
   overlay.appendChild(skipButton);
   
   // Show the button after a delay

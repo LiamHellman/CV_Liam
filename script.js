@@ -1050,4 +1050,5 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Terminal elements not found');
     }
   }, 1000); // Wait a second for any animations to complete
+  
 });
