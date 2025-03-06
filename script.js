@@ -1,278 +1,261 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // Global variables
+  // Original content should be hidden initially
+  const mainSections = document.querySelectorAll('#terminal, #education, #experience, #projects, #skills');
+  mainSections.forEach(section => {
+    if (section) {
+      section.style.opacity = "0";
+      section.style.transition = "opacity 0.8s ease-out";
+      section.classList.remove('fade-in-up'); // Remove original animations temporarily
+    }
+  });
+  
+  // Add particle glow effect once loading is complete
+  const particlesElement = document.getElementById('particles-js');
+  if (particlesElement) {
+    particlesElement.classList.add('particle-glow');
+  }
+  
+  // Wait for loading overlay to finish and remove
+  const checkLoaderRemoved = setInterval(() => {
+    if (!document.getElementById('loading-overlay')) {
+      clearInterval(checkLoaderRemoved);
+      
+      // Sequence the reveal of each section with slight delays
+      let delay = 300;
+      
+      mainSections.forEach((section, index) => {
+        if (section) {
+          setTimeout(() => {
+            section.style.opacity = "1";
+            section.classList.add('content-enter');
+          }, delay * (index + 1));
+        }
+      });
+      
+      // Re-initialize the terminal with a dramatic entrance
+      const terminalElement = document.getElementById('embedded-terminal');
+      if (terminalElement) {
+        terminalElement.style.transform = "scale(0.9)";
+        terminalElement.style.opacity = "0";
+        
+        setTimeout(() => {
+          terminalElement.style.transition = "all 0.8s cubic-bezier(0.17, 0.84, 0.44, 1.2)";
+          terminalElement.style.transform = "scale(1)";
+          terminalElement.style.opacity = "1";
+          
+          // Simulate typing in the terminal after it appears
+          setTimeout(() => {
+            const terminalOutput = document.getElementById('embedded-terminal-output');
+            if (terminalOutput) {
+              const welcomeMessage = document.createElement('div');
+              welcomeMessage.innerHTML = '<span class="text-yellow-300">System loaded successfully. Welcome to Liam Hellman\'s portfolio.</span>';
+              terminalOutput.appendChild(welcomeMessage);
+              terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+          }, 800);
+        }, delay * (mainSections.length + 1));
+      }
+    }
+  }, 100);
+});
+
+// Enhanced particles initialization with more dynamic settings
+document.addEventListener("DOMContentLoaded", function() {
+  // Enhanced particles configuration
+  if (typeof particlesJS !== 'undefined') {
+    // Check if particles.js is loaded before initializing
+    const enhancedParticleConfig = {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#48bb78"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          },
+          "polygon": {
+            "nb_sides": 5
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 2,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#48bb78",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2,
+          "direction": "none",
+          "random": true,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": true,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 140,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    };
+
+    // Override the default particles initialization to use enhanced settings
+    // But don't immediately initialize - wait for loading animation to complete
+    const originalParticlesLoad = window.particlesJS ? window.particlesJS.load : null;
+    if (originalParticlesLoad) {
+      window.particlesJS.load = function(selector, path, callback) {
+        // Just initialize with our custom config instead of loading from path
+        window.particlesJS(selector, enhancedParticleConfig);
+        if (callback) callback();
+      };
+    }
+  }
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("Script loaded and DOM ready.");
+
   let language = "en";
   let isSidebarOpen = false;
-  let globalAnimationComplete = false;
-  
-  // DOM Elements
+
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebarToggle");
   const sidebarOverlay = document.getElementById("sidebarOverlay");
-  const mainSections = document.querySelectorAll('#terminal, #education, #experience, #projects, #skills');
-  const particlesElement = document.getElementById('particles-js');
   
-  // Initialize page
-  initPage();
-  
-  // Main initialization function
-  function initPage() {
-    // Hide original content initially for animation
-    preparePageForAnimation();
-    
-    // Setup event listeners
-    setupEventListeners();
-    
-    // Initialize Particles.js with optimized config
-    initializeParticles();
-    
-    // Initial render of content
+  // Toggle sidebar
+  sidebarToggle.addEventListener("click", function () {
+    toggleSidebar();
+  });
+
+  // Close sidebar when clicking overlay
+  sidebarOverlay.addEventListener("click", function () {
+    closeSidebar();
+  });
+
+  // Close sidebar when clicking a link
+  const sidebarLinks = document.querySelectorAll("#sidebar a");
+  sidebarLinks.forEach(link => {
+    link.addEventListener("click", function () {
+      closeSidebar();
+    });
+  });
+
+  // Language toggle for sidebar
+  document.getElementById("langToggleSidebar").addEventListener("click", function () {
+    language = language === "en" ? "fr" : "en";
     renderContent();
-    
-    // Initialize terminal if we're on the homepage
-    if (document.getElementById('terminal')) {
-      initializeTerminal();
-    }
-    
-    // Check if loading overlay has been removed
-    monitorLoadingOverlay();
-  }
-  
-  // Prepare page for animations
-  function preparePageForAnimation() {
-    mainSections.forEach(section => {
-      if (section) {
-        section.style.opacity = "0";
-        section.style.transition = "opacity 0.8s ease-out";
-        section.classList.remove('fade-in-up');
-      }
-    });
-    
-    // Add particle glow effect
-    if (particlesElement) {
-      particlesElement.classList.add('particle-glow');
-    }
-  }
-  
-  // Setup all event listeners
-  function setupEventListeners() {
-    // Toggle sidebar
-    if (sidebarToggle) {
-      sidebarToggle.addEventListener("click", toggleSidebar);
-    }
-    
-    // Close sidebar when clicking overlay
-    if (sidebarOverlay) {
-      sidebarOverlay.addEventListener("click", closeSidebar);
-    }
-    
-    // Close sidebar when clicking a link
-    const sidebarLinks = document.querySelectorAll("#sidebar a");
-    sidebarLinks.forEach(link => {
-      link.addEventListener("click", closeSidebar);
-    });
-    
-    // Language toggle for sidebar
-    const langToggle = document.getElementById("langToggleSidebar");
-    if (langToggle) {
-      langToggle.addEventListener("click", function() {
-        language = language === "en" ? "fr" : "en";
-        renderContent();
-        closeSidebar();
-      });
-    }
-    
-    // Adjust terminal size on window resize
-    window.addEventListener('resize', adjustTerminalSize);
-  }
-  
-  // Initialize particles.js
-  function initializeParticles() {
-    if (typeof particlesJS !== 'undefined' && particlesElement) {
-      const enhancedParticleConfig = {
-        "particles": {
-          "number": {
-            "value": 80,
-            "density": {
-              "enable": true,
-              "value_area": 800
-            }
-          },
-          "color": {
-            "value": "#48bb78"
-          },
-          "shape": {
-            "type": "circle",
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            }
-          },
-          "opacity": {
-            "value": 0.5,
-            "random": true,
-            "anim": {
-              "enable": true,
-              "speed": 1,
-              "opacity_min": 0.1,
-              "sync": false
-            }
-          },
-          "size": {
-            "value": 3,
-            "random": true,
-            "anim": {
-              "enable": true,
-              "speed": 2,
-              "size_min": 0.1,
-              "sync": false
-            }
-          },
-          "line_linked": {
-            "enable": true,
-            "distance": 150,
-            "color": "#48bb78",
-            "opacity": 0.4,
-            "width": 1
-          },
-          "move": {
-            "enable": true,
-            "speed": 2,
-            "direction": "none",
-            "random": true,
-            "straight": false,
-            "out_mode": "out",
-            "bounce": false,
-            "attract": {
-              "enable": true,
-              "rotateX": 600,
-              "rotateY": 1200
-            }
-          }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": {
-            "onhover": {
-              "enable": true,
-              "mode": "grab"
-            },
-            "onclick": {
-              "enable": true,
-              "mode": "push"
-            },
-            "resize": true
-          },
-          "modes": {
-            "grab": {
-              "distance": 140,
-              "line_linked": {
-                "opacity": 1
-              }
-            },
-            "push": {
-              "particles_nb": 4
-            }
-          }
-        },
-        "retina_detect": true
-      };
-      
-      particlesJS(particlesElement.id, enhancedParticleConfig);
-    }
-  }
-  
-  // Monitor loading overlay removal
-  function monitorLoadingOverlay() {
-    const checkLoaderRemoved = setInterval(() => {
-      if (!document.getElementById('loading-overlay')) {
-        clearInterval(checkLoaderRemoved);
-        revealContentSections();
-      }
-    }, 100);
-  }
-  
-  // Reveal content sections with animation
-  function revealContentSections() {
-    let delay = 300;
-    
-    mainSections.forEach((section, index) => {
-      if (section) {
-        setTimeout(() => {
-          section.style.opacity = "1";
-          section.classList.add('content-enter');
-        }, delay * (index + 1));
-      }
-    });
-    
-    // Animate terminal entrance if it exists
-    animateTerminalEntrance(delay * (mainSections.length + 1));
-  }
-  
-  // Animate terminal entrance
-  function animateTerminalEntrance(delay) {
-    const terminalElement = document.getElementById('embedded-terminal');
-    if (terminalElement) {
-      terminalElement.style.transform = "scale(0.9)";
-      terminalElement.style.opacity = "0";
-      
-      setTimeout(() => {
-        terminalElement.style.transition = "all 0.8s cubic-bezier(0.17, 0.84, 0.44, 1.2)";
-        terminalElement.style.transform = "scale(1)";
-        terminalElement.style.opacity = "1";
-        
-        // Simulate typing in the terminal after it appears
-        setTimeout(() => {
-          const terminalOutput = document.getElementById('embedded-terminal-output');
-          if (terminalOutput) {
-            const welcomeMessage = document.createElement('div');
-            welcomeMessage.innerHTML = '<span class="text-yellow-300">System loaded successfully. Welcome to Liam Hellman\'s portfolio.</span>';
-            terminalOutput.appendChild(welcomeMessage);
-            terminalOutput.scrollTop = terminalOutput.scrollHeight;
-          }
-        }, 800);
-      }, delay);
-    }
-  }
-  
-  // Adjust terminal size based on screen width
-  function adjustTerminalSize() {
-    const terminalOutput = document.getElementById('embedded-terminal-output');
-    
-    if (terminalOutput) {
-      const height = window.innerWidth <= 640 ? '200px' : '250px';
-      terminalOutput.style.height = height;
-      terminalOutput.style.minHeight = height;
-      terminalOutput.style.maxHeight = height;
-    }
-  }
-  
-  // Toggle sidebar function
+    closeSidebar(); // Close the sidebar when language is toggled
+  });
+
+  // Initialize Particles.js
+  particlesJS.load("particles-js", "particles.json", function () {
+    console.log("Particles.js config loaded");
+  });
+
+  // Function to toggle sidebar
   function toggleSidebar() {
     isSidebarOpen = !isSidebarOpen;
     if (isSidebarOpen) {
       sidebar.classList.remove("-translate-x-full");
       sidebarOverlay.classList.remove("hidden");
       document.body.classList.add("sidebar-open");
-      sidebarToggle.classList.add("hidden");
+      sidebarToggle.classList.add("hidden"); // Hide the toggle button when sidebar is open
     } else {
-      closeSidebar();
+      sidebar.classList.add("-translate-x-full");
+      sidebarOverlay.classList.add("hidden");
+      document.body.classList.remove("sidebar-open");
+      // Add a delay before showing the toggle button again
+      setTimeout(() => {
+        sidebarToggle.classList.remove("hidden");
+      }, 300); // Match this with the sidebar transition duration
     }
   }
-  
-  // Close sidebar function
+
+  // Function to close sidebar
   function closeSidebar() {
     isSidebarOpen = false;
     sidebar.classList.add("-translate-x-full");
     sidebarOverlay.classList.add("hidden");
     document.body.classList.remove("sidebar-open");
-    
     // Add a delay before showing the toggle button again
     setTimeout(() => {
       sidebarToggle.classList.remove("hidden");
-    }, 300);
+    }, 300); // Match this with the sidebar transition duration
   }
-  
-  // Translations and content data
+  // Translations and content
   const translations = {
     en: {
       education: "Education",
@@ -287,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function() {
       contact: "Contact"
     }
   };
-  
+
   const content = {
     en: {
       personalInfo: {
@@ -518,196 +501,132 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   };
-  
+
   // Function to create bubbles for skills
   function createBubbles(items, colorClass) {
     const container = document.createElement("div");
     container.className = "flex flex-wrap gap-2 mt-2";
-    
     items.forEach(item => {
       const span = document.createElement("span");
       span.className = `px-3 py-1 ${colorClass} rounded-full text-sm font-medium`;
       span.innerText = item;
       container.appendChild(span);
     });
-    
     return container;
   }
-  
+
   // Function to render content based on language
   function renderContent() {
-    renderEducation();
-    renderExperience();
-    renderProjects();
-    renderSkills();
-  }
-  
-  // Render Education Section
-  function renderEducation() {
+    // Render Education Section (if container exists)
     const eduContainer = document.getElementById("educationContainer");
-    const eduHeading = document.getElementById("educationHeading");
-    
-    if (eduHeading) {
-      eduHeading.innerText = translations[language].education;
-    }
-    
     if (eduContainer) {
       eduContainer.innerHTML = ""; // Clear existing content
-      
       content[language].education.forEach(edu => {
         const eduDiv = document.createElement("div");
         eduDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
-        
         const headerDiv = document.createElement("div");
         headerDiv.className = "flex justify-between items-start";
-        
         const innerDiv = document.createElement("div");
-        
         const h3 = document.createElement("h3");
         h3.className = "text-xl font-bold text-green-400";
         h3.innerText = edu.degree;
-        
         const p = document.createElement("p");
         p.className = "text-green-300";
         p.innerText = edu.institution;
-        
         innerDiv.appendChild(h3);
         innerDiv.appendChild(p);
-        
         const periodSpan = document.createElement("span");
         periodSpan.className = "text-sm text-green-300";
         periodSpan.innerText = edu.period;
-        
         headerDiv.appendChild(innerDiv);
         headerDiv.appendChild(periodSpan);
-        
         const ul = document.createElement("ul");
         ul.className = "mt-4 space-y-2";
-        
         edu.details.forEach(detail => {
           const li = document.createElement("li");
           li.className = "text-green-300";
           li.innerText = "• " + detail;
           ul.appendChild(li);
         });
-        
         eduDiv.appendChild(headerDiv);
         eduDiv.appendChild(ul);
         eduContainer.appendChild(eduDiv);
       });
     }
-  }
-  
-  // Render Experience Section
-  function renderExperience() {
+
+    // Render Experience Section (if container exists)
     const expContainer = document.getElementById("experienceContainer");
-    const expHeading = document.getElementById("experienceHeading");
-    
-    if (expHeading) {
-      expHeading.innerText = translations[language].experience;
-    }
-    
     if (expContainer) {
       expContainer.innerHTML = ""; // Clear existing content
-      
       content[language].experience.forEach(exp => {
         const expDiv = document.createElement("div");
         expDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
-        
         const headerDiv = document.createElement("div");
         headerDiv.className = "flex justify-between items-start";
-        
         const innerDiv = document.createElement("div");
-        
         const h3 = document.createElement("h3");
         h3.className = "text-xl font-bold text-green-400";
         h3.innerText = exp.title;
-        
         const p = document.createElement("p");
         p.className = "text-green-300";
         p.innerText = exp.company;
-        
         innerDiv.appendChild(h3);
         innerDiv.appendChild(p);
-        
         const periodSpan = document.createElement("span");
         periodSpan.className = "text-sm text-green-300";
         periodSpan.innerText = exp.period;
-        
         headerDiv.appendChild(innerDiv);
         headerDiv.appendChild(periodSpan);
-        
         const ul = document.createElement("ul");
         ul.className = "mt-4 space-y-2";
-        
         exp.responsibilities.forEach(resp => {
           const li = document.createElement("li");
           li.className = "text-green-300";
           li.innerText = "• " + resp;
           ul.appendChild(li);
         });
-        
         expDiv.appendChild(headerDiv);
         expDiv.appendChild(ul);
         expContainer.appendChild(expDiv);
       });
     }
-  }
-  
-  // Render Projects Section
-  function renderProjects() {
+
+    // Render Projects Section (if container exists)
     const projContainer = document.getElementById("projectsContainer");
-    const projHeading = document.getElementById("projectsHeading");
-    
-    if (projHeading) {
-      projHeading.innerText = translations[language].projects;
-    }
-    
     if (projContainer) {
       projContainer.innerHTML = ""; // Clear existing content
-      
       content[language].projects.forEach(proj => {
         const projDiv = document.createElement("div");
         projDiv.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
-        
         const headerDiv = document.createElement("div");
         headerDiv.className = "flex justify-between items-start";
-        
         const h3 = document.createElement("h3");
         h3.className = "text-xl font-bold text-green-400";
         h3.innerText = proj.title;
-        
         const dateSpan = document.createElement("span");
         dateSpan.className = "text-sm text-green-300";
         dateSpan.innerText = proj.date;
-        
         headerDiv.appendChild(h3);
         headerDiv.appendChild(dateSpan);
-        
         const descP = document.createElement("p");
         descP.className = "mt-2 text-green-300";
         descP.innerText = proj.description;
-        
         const techDiv = document.createElement("div");
         techDiv.className = "mt-4 flex flex-wrap gap-2";
-        
         proj.technologies.forEach(tech => {
           const techSpan = document.createElement("span");
           techSpan.className = "px-2 py-1 bg-green-900 text-green-400 rounded text-sm";
           techSpan.innerText = tech;
           techDiv.appendChild(techSpan);
         });
-        
         const ul = document.createElement("ul");
         ul.className = "mt-4 space-y-2";
-        
         proj.points.forEach(point => {
           const li = document.createElement("li");
           li.className = "text-green-300 text-sm";
           li.innerText = "• " + point;
           ul.appendChild(li);
         });
-        
         projDiv.appendChild(headerDiv);
         projDiv.appendChild(descP);
         projDiv.appendChild(techDiv);
@@ -715,52 +634,43 @@ document.addEventListener("DOMContentLoaded", function() {
         projContainer.appendChild(projDiv);
       });
     }
-  }
-  
-  // Render Skills Section
-  function renderSkills() {
+
+    // Render Skills & Interests Section (if container exists)
     const skillsSectionContainer = document.getElementById("skillsContent");
-    const skillsHeading = document.getElementById("skillsHeading");
-    
-    if (skillsHeading) {
-      skillsHeading.innerText = "Skills & Interests";
-    }
-    
     if (skillsSectionContainer) {
       skillsSectionContainer.innerHTML = ""; // Clear existing content
-      
       const skillsCard = document.createElement("div");
       skillsCard.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
-      
+  
       const skillsData = content[language].skills;
-      
+  
       // Qualities - green theme
       const qualitiesHeading = document.createElement("h3");
       qualitiesHeading.innerText = "Qualities:";
       qualitiesHeading.className = "text-xl font-bold text-green-400";
       skillsCard.appendChild(qualitiesHeading);
       skillsCard.appendChild(createBubbles(skillsData.qualities, "bg-green-900 text-purple-100"));
-      
+  
       // Languages - blue theme
       const languagesHeading = document.createElement("h3");
       languagesHeading.innerText = "Languages:";
       languagesHeading.className = "text-xl font-bold text-green-400 mt-4";
       skillsCard.appendChild(languagesHeading);
       skillsCard.appendChild(createBubbles(skillsData.languages, "bg-blue-900 text-blue-100"));
-      
-      // Interests - cyan theme
+  
+      // Interests - cyan theme (fallback from teal)
       const interestsHeading = document.createElement("h3");
       interestsHeading.innerText = "Interests:";
       interestsHeading.className = "text-xl font-bold text-green-400 mt-4";
       skillsCard.appendChild(interestsHeading);
       skillsCard.appendChild(createBubbles(skillsData.interests, "bg-blue-800 text-white"));
-      
+  
       // Technical Skills - heading
       const techHeading = document.createElement("h3");
       techHeading.innerText = "Technical Skills:";
       techHeading.className = "text-xl font-bold text-green-400 mt-4";
       skillsCard.appendChild(techHeading);
-      
+  
       const technical = skillsData.technical;
       
       // Programming - red theme
@@ -769,45 +679,154 @@ document.addEventListener("DOMContentLoaded", function() {
       programmingHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(programmingHeading);
       skillsCard.appendChild(createBubbles(technical.programming, "bg-red-900 text-red-100"));
-      
+  
       // Frameworks - indigo theme 
       const frameworksHeading = document.createElement("h4");
       frameworksHeading.innerText = "Frameworks:";
       frameworksHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(frameworksHeading);
       skillsCard.appendChild(createBubbles(technical.frameworks, "bg-indigo-800 text-white"));
-      
+  
       // Tools - orange theme
       const toolsHeading = document.createElement("h4");
       toolsHeading.innerText = "Tools:";
       toolsHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(toolsHeading);
       skillsCard.appendChild(createBubbles(technical.tools, "bg-yellow-900 text-indigo-100"));
-      
-      // Databases - purple theme
+  
+      // Databases - pruple theme (fallback from emerald)
       const databasesHeading = document.createElement("h4");
       databasesHeading.innerText = "Databases:";
       databasesHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(databasesHeading);
       skillsCard.appendChild(createBubbles(technical.databases, "bg-purple-800 text-white"));
-      
+  
       skillsSectionContainer.appendChild(skillsCard);
     }
   }
 
-  // Terminal implementation
-  function setupTerminalFunctionality() {
+  // Initial render of content
+  renderContent();
+
+
+});
+
+
+
+
+
+
+// Updated terminal implementation for embedding in the hero section
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Find the hero section and the place to embed the terminal
+  const heroSection = document.getElementById('terminal');
+  if (!heroSection) return; // Exit if we're not on the homepage
+  
+  // Find the container where we'll embed the terminal
+  const terminalContainer = heroSection.querySelector('.max-w-2xl');
+  if (!terminalContainer) return;
+  
+  // Remove the existing fake terminal prompt
+  const fakePrompt = terminalContainer.querySelector('p.text-sm.mb-4');
+  if (fakePrompt) {
+    fakePrompt.remove();
+  }
+  
+  // Create and insert the embedded terminal
+  createEmbeddedTerminal(terminalContainer);
+  
+  function createEmbeddedTerminal(container) {
+    // Create terminal container
+    const terminal = document.createElement('div');
+    terminal.id = 'embedded-terminal';
+    terminal.className = 'w-full mb-6 font-mono text-base relative z-20'; // Changed text-sm to text-base
+    
+    // Create terminal header
+    const header = document.createElement('div');
+    header.className = 'flex items-center justify-between p-3 bg-gray-800 border-t border-l border-r border-green-400 rounded-t-md'; // Increased padding
+    
+    const title = document.createElement('div');
+    title.className = 'text-green-300 text-sm'; // Increased from text-xs
+    title.textContent = 'Resume Terminal';
+    
+    const controls = document.createElement('div');
+    controls.className = 'flex space-x-2'; // Increased spacing
+    
+    ['#FF5F56', '#FFBD2E', '#27C93F'].forEach(color => {
+      const circle = document.createElement('div');
+      circle.className = 'w-3 h-3 rounded-full'; // Increased size
+      circle.style.backgroundColor = color;
+      controls.appendChild(circle);
+    });
+    
+    header.appendChild(title);
+    header.appendChild(controls);
+    terminal.appendChild(header);
+    
+    // Create terminal body
+    const body = document.createElement('div');
+    body.className = 'p-4 bg-black border-l border-r border-green-400'; // Increased padding
+    body.style.minHeight = '300px'; // Ensure minimum height
+    
+    // Create terminal output
+    const output = document.createElement('div');
+    output.id = 'embedded-terminal-output';
+    output.className = 'text-green-400 mb-3 overflow-y-auto'; // Increased margin
+    output.style.height = '250px'; // Fixed height
+    output.style.minHeight = '250px'; 
+    output.style.maxHeight = '250px';
+    body.appendChild(output);
+    
+    // Create input area
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'flex items-center mt-2'; // Added margin top
+    
+    const prompt = document.createElement('span');
+    prompt.className = 'mr-2 text-base'; // Increased margin and font size
+    prompt.innerHTML = '<span class="text-green-300">liam@portfolio</span>:<span class="text-blue-400">~</span>$ ';
+    inputContainer.appendChild(prompt);
+    
+    const input = document.createElement('input');
+    input.id = 'embedded-terminal-input';
+    input.className = 'flex-grow bg-transparent text-green-400 outline-none text-base'; // Increased font size
+    input.type = 'text';
+    input.autocomplete = 'off';
+    input.placeholder = 'ʕ•ᴥ•ʔ';
+    inputContainer.appendChild(input);
+    
+    body.appendChild(inputContainer);
+    
+    // Create terminal footer
+    const footer = document.createElement('div');
+    footer.className = 'p-2 text-right text-sm text-green-300 bg-gray-800 border-b border-l border-r border-green-400 rounded-b-md'; // Increased font size
+    footer.textContent = 'Type "help" for commands';
+    
+    terminal.appendChild(header);
+    terminal.appendChild(body);
+    terminal.appendChild(footer);
+    
+    // Insert terminal at the top of the container
+    container.insertBefore(terminal, container.firstChild);
+    
+    // Initialize terminal functionality
+    initializeTerminal();
+  }
+  
+  function initializeTerminal() {
     const terminal = document.getElementById('embedded-terminal-input');
     const terminalOutput = document.getElementById('embedded-terminal-output');
-    
-    if (!terminal || !terminalOutput) return;
-    
     const terminalHistory = [];
     let historyIndex = -1;
-    
+
     // Show welcome message
     addToTerminalOutput('');
     
+    // Auto-execute intro command after a brief delay
+    //setTimeout(() => {
+    //  executeCommand('');
+    //}, 500);
+
     // Terminal input handling
     terminal.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
@@ -837,15 +856,29 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
     });
+
+    // Focus terminal on click - more robust event handling
+    document.getElementById('embedded-terminal').addEventListener('click', function(e) {
+      e.stopPropagation();
+      terminal.focus();
+    }, true);
     
+    // Make sure the terminal container is properly clickable
+    document.querySelectorAll('#embedded-terminal, #embedded-terminal *').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        terminal.focus();
+      }, true);
+    });
+
     // Execute terminal commands
     function executeCommand(command) {
       const commandLower = command.toLowerCase();
       const args = commandLower.split(' ');
       const cmd = args[0];
-      
+
       addToTerminalOutput(`<span class="text-green-300">liam@portfolio</span>:<span class="text-blue-400">~</span>$ ${command}`);
-      
+
       switch (cmd) {
         case 'help':
           showHelp();
@@ -876,7 +909,7 @@ document.addEventListener("DOMContentLoaded", function() {
           addToTerminalOutput(`Command not found: ${command}. Type 'help' for available commands.`);
       }
     }
-    
+
     // Terminal helper functions
     function addToTerminalOutput(text) {
       const line = document.createElement('div');
@@ -885,11 +918,11 @@ document.addEventListener("DOMContentLoaded", function() {
       terminalOutput.appendChild(line);
       terminalOutput.scrollTop = terminalOutput.scrollHeight;
     }
-    
+
     function clearTerminal() {
       terminalOutput.innerHTML = '';
     }
-    
+
     function showHelp() {
       addToTerminalOutput('<span class="text-yellow-300">Available commands:</span>');
       addToTerminalOutput('  <span class="text-blue-400">help</span>           - Show this help message');
@@ -899,13 +932,13 @@ document.addEventListener("DOMContentLoaded", function() {
       addToTerminalOutput('  <span class="text-blue-400">whoami</span>         - Display current user');
       addToTerminalOutput('  <span class="text-blue-400">date</span>           - Display current date and time');
     }
-    
+
     function listSections() {
       addToTerminalOutput('<span class="text-yellow-300">Available sections:</span>');
       addToTerminalOutput('education   experience');
       addToTerminalOutput('projects    skills      contact');
     }
-    
+
     function navigateToSection(section) {
       const validSections = ['education', 'experience', 'projects', 'skills', 'contact'];
       
@@ -927,133 +960,95 @@ document.addEventListener("DOMContentLoaded", function() {
         addToTerminalOutput('Available sections: education, experience, projects, skills, contact');
       }
     }
-  }
-  
-  function initializeTerminal() {
-    // Find the hero section and container
-    const heroSection = document.getElementById('terminal');
-    if (!heroSection) return;
-    
-    const terminalContainer = heroSection.querySelector('.max-w-2xl');
-    if (!terminalContainer) return;
-    
-    // Create embedded terminal
-    createEmbeddedTerminal(terminalContainer);
-    
-    // Adjust terminal size initially
-    setTimeout(adjustTerminalSize, 100);
-    
-    // Fix terminal clickability
-    fixTerminalClickability();
-  }
-  
-  // Fix terminal clickability issues
-  function fixTerminalClickability() {
-    setTimeout(() => {
-      const terminal = document.getElementById('embedded-terminal');
-      const input = document.getElementById('embedded-terminal-input');
+
+    function showIntroduction() {
+      // Fetch the hero content and display it in the terminal
+      const name = document.getElementById('heroName').innerText || content[language].personalInfo.name;
+      const title = document.getElementById('heroTitle').innerText || content[language].personalInfo.title;
+      const location = document.getElementById('heroLocation').innerText || content[language].personalInfo.location;
       
-      if (terminal && input) {
-        // Ensure the terminal and its children have proper z-index and pointer events
-        terminal.style.position = 'relative';
-        terminal.style.zIndex = '30';
-        terminal.style.pointerEvents = 'auto';
-        
-        // Add a direct click handler to focus the input
-        terminal.onclick = function(e) {
+      addToTerminalOutput('<span class="text-yellow-300">// Introduction.txt</span>');
+      addToTerminalOutput(`<span class="text-green-400 font-bold">${name}</span>`);
+      addToTerminalOutput(`<span class="text-green-300">${title}</span>`);
+      addToTerminalOutput(`<span class="text-green-300">${location}</span>`);
+      addToTerminalOutput('');
+      addToTerminalOutput('Welcome to my interactive portfolio! Use the terminal to navigate through my experience and projects.');
+    }
+  }
+});
+
+
+window.addEventListener('resize', function() {
+  const terminal = document.getElementById('embedded-terminal');
+  const terminalOutput = document.getElementById('embedded-terminal-output');
+  
+  if (terminal && terminalOutput) {
+    // Apply fixed height to ensure consistency
+    terminalOutput.style.height = '250px';
+    terminalOutput.style.minHeight = '250px';
+    terminalOutput.style.maxHeight = '250px';
+    
+    // Adjust for mobile devices
+    if (window.innerWidth <= 640) {
+      terminalOutput.style.height = '200px';
+      terminalOutput.style.minHeight = '200px';
+      terminalOutput.style.maxHeight = '200px';
+    }
+  }
+});
+
+// Apply terminal size immediately on load
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a short time to ensure DOM is fully loaded
+  setTimeout(() => {
+    const terminalOutput = document.getElementById('embedded-terminal-output');
+    if (terminalOutput) {
+      // Set fixed height
+      terminalOutput.style.height = window.innerWidth <= 640 ? '200px' : '250px';
+      terminalOutput.style.minHeight = window.innerWidth <= 640 ? '200px' : '250px';
+      terminalOutput.style.maxHeight = window.innerWidth <= 640 ? '200px' : '250px';
+      
+      console.log('Terminal size applied successfully');
+    }
+  }, 500);
+});
+
+// Fix terminal clickability issues
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait for the terminal to be fully created
+  setTimeout(() => {
+    const terminal = document.getElementById('embedded-terminal');
+    const input = document.getElementById('embedded-terminal-input');
+    
+    if (terminal && input) {
+      // Ensure the terminal and its children have proper z-index and pointer events
+      terminal.style.position = 'relative';
+      terminal.style.zIndex = '30';
+      terminal.style.pointerEvents = 'auto';
+      
+      // Add a direct click handler to focus the input
+      terminal.onclick = function(e) {
+        input.focus();
+        e.stopPropagation();
+      };
+      
+      // Handle clicks on all terminal elements
+      const terminalElements = terminal.querySelectorAll('*');
+      terminalElements.forEach(element => {
+        element.style.pointerEvents = 'auto';
+        element.onclick = function(e) {
           input.focus();
           e.stopPropagation();
         };
-        
-        // Handle clicks on all terminal elements
-        const terminalElements = terminal.querySelectorAll('*');
-        terminalElements.forEach(element => {
-          element.style.pointerEvents = 'auto';
-          element.onclick = function(e) {
-            input.focus();
-            e.stopPropagation();
-          };
-        });
-        
-        // Focus the input on page load
-        input.focus();
-      }
-    }, 1000);
-  }
+      });
+      
+      // Focus the input on page load
+      input.focus();
+      
+      console.log('Terminal click handlers applied');
+    } else {
+      console.log('Terminal elements not found');
+    }
+  }, 1000); // Wait a second for any animations to complete
   
-  function createEmbeddedTerminal(container) {
-    // Create terminal container
-    const terminal = document.createElement('div');
-    terminal.id = 'embedded-terminal';
-    terminal.className = 'w-full mb-6 font-mono text-base relative z-20';
-    
-    // Create terminal header
-    const header = document.createElement('div');
-    header.className = 'flex items-center justify-between p-3 bg-gray-800 border-t border-l border-r border-green-400 rounded-t-md';
-    
-    const title = document.createElement('div');
-    title.className = 'text-green-300 text-sm';
-    title.textContent = 'Resume Terminal';
-    
-    const controls = document.createElement('div');
-    controls.className = 'flex space-x-2';
-    
-    ['#FF5F56', '#FFBD2E', '#27C93F'].forEach(color => {
-      const circle = document.createElement('div');
-      circle.className = 'w-3 h-3 rounded-full';
-      circle.style.backgroundColor = color;
-      controls.appendChild(circle);
-    });
-    
-    header.appendChild(title);
-    header.appendChild(controls);
-    
-    // Create terminal body
-    const body = document.createElement('div');
-    body.className = 'p-4 bg-black border-l border-r border-green-400';
-    body.style.minHeight = '300px';
-    
-    // Create terminal output
-    const output = document.createElement('div');
-    output.id = 'embedded-terminal-output';
-    output.className = 'text-green-400 mb-3 overflow-y-auto';
-    output.style.height = '250px';
-    output.style.minHeight = '250px'; 
-    output.style.maxHeight = '250px';
-    body.appendChild(output);
-    
-    // Create input area
-    const inputContainer = document.createElement('div');
-    inputContainer.className = 'flex items-center mt-2';
-    
-    const prompt = document.createElement('span');
-    prompt.className = 'mr-2 text-base';
-    prompt.innerHTML = '<span class="text-green-300">liam@portfolio</span>:<span class="text-blue-400">~</span>$ ';
-    inputContainer.appendChild(prompt);
-    
-    const input = document.createElement('input');
-    input.id = 'embedded-terminal-input';
-    input.className = 'flex-grow bg-transparent text-green-400 outline-none text-base';
-    input.type = 'text';
-    input.autocomplete = 'off';
-    input.placeholder = 'ʕ•ᴥ•ʔ';
-    inputContainer.appendChild(input);
-    
-    body.appendChild(inputContainer);
-    
-    // Create terminal footer
-    const footer = document.createElement('div');
-    footer.className = 'p-2 text-right text-sm text-green-300 bg-gray-800 border-b border-l border-r border-green-400 rounded-b-md';
-    footer.textContent = 'Type "help" for commands';
-    
-    terminal.appendChild(header);
-    terminal.appendChild(body);
-    terminal.appendChild(footer);
-    
-    // Insert terminal at the top of the container
-    container.insertBefore(terminal, container.firstChild);
-    
-    // Initialize terminal functionality
-    setupTerminalFunctionality();
-  }
 });

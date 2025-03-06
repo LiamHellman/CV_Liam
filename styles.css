@@ -1,18 +1,4 @@
-/* =============================================
-   Base Styles
-============================================= */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #000;
-  font-family: 'Courier New', monospace;
-  color: #48bb78;
-}
-
-/* =============================================
-   Animation Keyframes
-============================================= */
+/* Fade in and slide up animation */
 @keyframes fadeInUp {
   0% {
     transform: translateY(20px);
@@ -24,363 +10,140 @@ html, body {
   }
 }
 
-@keyframes fadeInScaleUp {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes scan {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes flicker {
-  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
-    opacity: 0.99;
-  }
-  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
-    opacity: 0.4;
-  }
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(72, 187, 120, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
-  }
-}
-
-@keyframes particleGlow {
-  0% {
-    filter: blur(0px) brightness(1);
-  }
-  50% {
-    filter: blur(2px) brightness(1.5);
-  }
-  100% {
-    filter: blur(0px) brightness(1);
-  }
-}
-
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@keyframes terminalFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes glitch {
-  0% {
-    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                 -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
-                 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-  }
-  14% {
-    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                 -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
-                 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-  }
-  15% {
-    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
-                 0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
-                 -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
-  }
-  49% {
-    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
-                 0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
-                 -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
-  }
-  50% {
-    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
-                 0.05em 0 0 rgba(0, 255, 0, 0.75),
-                 0 -0.05em 0 rgba(0, 0, 255, 0.75);
-  }
-  99% {
-    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
-                 0.05em 0 0 rgba(0, 255, 0, 0.75),
-                 0 -0.05em 0 rgba(0, 0, 255, 0.75);
-  }
-  100% {
-    text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
-                 -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
-                 -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
-  }
-}
-
-/* =============================================
-   Animation Classes
-============================================= */
 .fade-in-up {
   animation: fadeInUp 1s ease forwards;
 }
 
-.content-enter {
-  animation: fadeInScaleUp 0.8s ease-out forwards;
-}
-
-.particle-glow {
-  animation: particleGlow 3s ease-in-out;
-}
-
-/* Animation delays */
+/* Delays for each section */
 .delay-1 { animation-delay: 0.5s; }
 .delay-2 { animation-delay: 1s; }
 .delay-3 { animation-delay: 1.5s; }
 .delay-4 { animation-delay: 2s; }
 .delay-5 { animation-delay: 2.5s; }
 
-/* =============================================
-   Loading Overlay Styles
-============================================= */
-#loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  overflow: hidden;
-}
-
-.loading-terminal {
-  position: relative;
-  animation: flicker 4s linear infinite;
-}
-
-.loading-terminal::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: rgba(72, 187, 120, 0.3);
-  animation: scan 4s linear infinite;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-#loading-terminal-output {
-  font-size: 1rem;
-}
-
-#loading-terminal-output div {
-  position: relative;
-  overflow: hidden;
-}
-
-#loading-terminal-output div:first-child {
-  animation: glitch 3s infinite;
-}
-
-#loading-progress {
-  animation: pulse 2s infinite;
-}
-
-#skip-animation-button {
-  transition: background-color 0.3s ease;
-}
-
-#skip-animation-button:hover {
-  background-color: rgba(72, 187, 120, 0.2);
-}
-
-/* =============================================
-   Navigation & Sidebar Styles
-============================================= */
+/* Sidebar styles */
 #sidebar {
   transition: transform 0.3s ease;
   z-index: 50;
 }
 
+#sidebar.open {
+  transform: translateX(0);
+}
+
+/* Sidebar overlay */
 #sidebarOverlay {
   transition: opacity 0.3s ease;
   z-index: 40;
 }
 
+#sidebarOverlay.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* Ensure content is not hidden behind the sidebar */
 body {
   padding-left: 0;
   transition: padding-left 0.3s ease;
 }
 
 body.sidebar-open {
-  padding-left: 256px;
+  padding-left: 256px; /* Adjust based on sidebar width */
 }
 
-#sidebarToggle {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-#sidebarToggle:hover {
-  background-color: #2d3748;
-}
-
-/* =============================================
-   Particles Background
-============================================= */
+/* Particles canvas behind content */
 #particles-js {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
   background-color: #000;
 }
 
-/* =============================================
-   Section Styling
-============================================= */
+/* Ensure anchor scrolling leaves space for fixed nav */
 #terminal, #education, #experience, #projects, #skills {
-  scroll-margin-top: 20px;
+  scroll-margin-top: 20px; /* Adjust as needed */
 }
 
-.bg-gray-800 {
+/* Navigation styles */
+nav {
+  transition: all 0.3s ease;
+  height: 4rem;
+  width: 100%;
+}
+
+/* Collapsed navigation styles */
+nav.collapsed {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Start off-screen */
+  width: 250px;
+  height: 100vh;
   background-color: #1a202c;
+  z-index: 50;
+  transition: left 0.3s ease;
 }
 
-.border-green-400 {
-  border-color: #48bb78;
+/* When nav is expanded */
+nav.collapsed.expanded {
+  left: 0;
 }
 
-.text-green-400 {
-  color: #48bb78;
+/* Adjust nav content when collapsed */
+nav.collapsed .max-w-7xl {
+  padding: 1rem;
 }
 
-.text-green-300 {
-  color: #68d391;
+nav.collapsed .flex {
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.hover\:text-green-200:hover {
-  color: #9ae6b4;
-}
-
-.hover\:shadow-xl:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* =============================================
-   Terminal Styling
-============================================= */
-#embedded-terminal {
+nav.collapsed .hidden.md\:flex {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
-  max-width: 700px;
-  min-height: 350px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  cursor: text;
-  position: relative;
-  z-index: 20;
-  pointer-events: auto !important;
-  margin: 0 auto;
-  opacity: 0;
-  transform: translateY(-10px);
-  animation: terminalFadeIn 0.5s forwards;
+  margin-top: 1rem;
 }
 
-#embedded-terminal-output {
-  scrollbar-width: thin;
-  scrollbar-color: #48bb78 #1a202c;
-  height: 250px;
-  min-height: 250px;
-  max-height: 250px;
-  transition: height 0.3s ease;
-  overflow-y: auto;
-}
-
-#embedded-terminal > div:nth-child(2) {
-  min-height: 300px;
-}
-
-/* Terminal scrollbar */
-#embedded-terminal-output::-webkit-scrollbar {
-  width: 6px;
-}
-
-#embedded-terminal-output::-webkit-scrollbar-track {
-  background: #1a202c;
-}
-
-#embedded-terminal-output::-webkit-scrollbar-thumb {
-  background-color: #48bb78;
-  border-radius: 10px;
-}
-
-/* Terminal output animation */
-#embedded-terminal-output div:last-child {
-  overflow: hidden;
-  white-space: nowrap;
-  animation: typing 0.5s steps(30, end);
-}
-
-/* Terminal input styling */
-#embedded-terminal-input {
-  position: relative;
-  z-index: 25;
-  background-color: transparent;
-  color: #48bb78;
-  outline: none;
-  border: none;
+nav.collapsed .hidden.md\:flex a {
+  padding: 0.75rem 0;
   width: 100%;
 }
 
-#embedded-terminal-input::after {
-  content: '|';
+/* Toggle button styles */
+#sidebarToggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 60;
+  background-color: #1a202c;
   color: #48bb78;
-  animation: blink 1s step-end infinite;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: block;
 }
 
-/* Terminal clickability fixes */
-#embedded-terminal *,
-#embedded-terminal-output,
-#embedded-terminal-input {
-  pointer-events: auto !important;
+#sidebarToggle.visible {
+  display: block;
 }
 
-/* =============================================
-   Skills & Badges
-============================================= */
-.bg-green-900 {
-  background-color: #1c4532;
+/* Overlay for when sidebar is expanded */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
 }
 
-.rounded-full {
-  border-radius: 9999px;
+.nav-overlay.visible {
+  display: block;
 }
 
-/* =============================================
-   Contact Form
-============================================= */
+/* General styles for the contact form */
 #contactForm input,
 #contactForm textarea {
   background-color: #000;
@@ -413,6 +176,7 @@ body.sidebar-open {
   color: #000;
 }
 
+/* Styles for the feedback message */
 #formFeedback {
   color: #48bb78;
   font-size: 0.875rem;
@@ -420,9 +184,180 @@ body.sidebar-open {
   text-align: center;
 }
 
-/* =============================================
-   Responsive Adjustments
-============================================= */
+/* Styles for the hero section */
+#heroName {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 800;
+  color: #48bb78;
+}
+
+#heroTitle {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: #48bb78;
+}
+
+#heroLocation {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: #48bb78;
+}
+
+/* Styles for the education, experience, and projects sections */
+.bg-gray-800 {
+  background-color: #1a202c;
+}
+
+.border-green-400 {
+  border-color: #48bb78;
+}
+
+.text-green-400 {
+  color: #48bb78;
+}
+
+.text-green-300 {
+  color: #68d391;
+}
+
+.hover\:text-green-200:hover {
+  color: #9ae6b4;
+}
+
+.hover\:shadow-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Styles for the skills section */
+.bg-green-900 {
+  background-color: #1c4532;
+}
+
+.text-green-400 {
+  color: #48bb78;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+/* Ensure the body takes up the full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure the particles background covers the entire screen */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+#terminal-container {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+
+/* Embedded Terminal Styles */
+#embedded-terminal {
+  width: 100%;
+  max-width: 700px; /* Set a maximum width */
+  min-height: 350px; /* Set a minimum height */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  cursor: text;
+  position: relative;
+  z-index: 20;
+  pointer-events: auto !important;
+  margin: 0 auto; /* Center the terminal */
+}
+
+#embedded-terminal-output {
+  scrollbar-width: thin;
+  scrollbar-color: #48bb78 #1a202c;
+  height: 250px; /* Increased fixed height */
+  min-height: 250px; /* Ensure minimum height */
+  max-height: 250px; /* Ensure maximum height */
+  transition: height 0.3s ease;
+  overflow-y: auto;
+}
+
+#embedded-terminal > div:nth-child(2) {
+  min-height: 300px; /* Set minimum height for terminal body */
+}
+
+/* Rest of the terminal styles */
+#embedded-terminal-output::-webkit-scrollbar {
+  width: 6px;
+}
+
+#embedded-terminal-output::-webkit-scrollbar-track {
+  background: #1a202c;
+}
+
+#embedded-terminal-output::-webkit-scrollbar-thumb {
+  background-color: #48bb78;
+  border-radius: 10px;
+}
+
+#embedded-terminal span.mr-1,
+#embedded-terminal-input {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Terminal text typing animation */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+#embedded-terminal-output div:last-child {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 0.5s steps(30, end);
+}
+
+/* Cursor blink animation */
+#embedded-terminal-input::after {
+  content: '|';
+  color: #48bb78;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Terminal fade-in animation */
+#embedded-terminal {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: terminalFadeIn 0.5s forwards;
+}
+
+@keyframes terminalFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Adjust margins and spacing */
+#embedded-terminal + h1 {
+  margin-top: 1.5rem;
+}
+
+/* Adjust for mobile */
 @media (max-width: 640px) {
   #embedded-terminal {
     min-height: 300px;
@@ -433,8 +368,18 @@ body.sidebar-open {
     min-height: 200px;
     max-height: 200px;
   }
-  
-  .loading-terminal {
-    width: 90%;
-  }
 }
+
+/* Fix for clickability */
+#embedded-terminal *,
+#embedded-terminal-output,
+#embedded-terminal-input {
+  pointer-events: auto !important;
+}
+
+/* Make sure input is properly accessible */
+#embedded-terminal-input {
+  position: relative;
+  z-index: 25;
+}
+
