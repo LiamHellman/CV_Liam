@@ -1,3 +1,190 @@
+document.addEventListener("DOMContentLoaded", function() {
+  // Original content should be hidden initially
+  const mainSections = document.querySelectorAll('#terminal, #education, #experience, #projects, #skills');
+  mainSections.forEach(section => {
+    if (section) {
+      section.style.opacity = "0";
+      section.style.transition = "opacity 0.8s ease-out";
+      section.classList.remove('fade-in-up'); // Remove original animations temporarily
+    }
+  });
+  
+  // Add particle glow effect once loading is complete
+  const particlesElement = document.getElementById('particles-js');
+  if (particlesElement) {
+    particlesElement.classList.add('particle-glow');
+  }
+  
+  // Wait for loading overlay to finish and remove
+  const checkLoaderRemoved = setInterval(() => {
+    if (!document.getElementById('loading-overlay')) {
+      clearInterval(checkLoaderRemoved);
+      
+      // Sequence the reveal of each section with slight delays
+      let delay = 300;
+      
+      mainSections.forEach((section, index) => {
+        if (section) {
+          setTimeout(() => {
+            section.style.opacity = "1";
+            section.classList.add('content-enter');
+          }, delay * (index + 1));
+        }
+      });
+      
+      // Re-initialize the terminal with a dramatic entrance
+      const terminalElement = document.getElementById('embedded-terminal');
+      if (terminalElement) {
+        terminalElement.style.transform = "scale(0.9)";
+        terminalElement.style.opacity = "0";
+        
+        setTimeout(() => {
+          terminalElement.style.transition = "all 0.8s cubic-bezier(0.17, 0.84, 0.44, 1.2)";
+          terminalElement.style.transform = "scale(1)";
+          terminalElement.style.opacity = "1";
+          
+          // Simulate typing in the terminal after it appears
+          setTimeout(() => {
+            const terminalOutput = document.getElementById('embedded-terminal-output');
+            if (terminalOutput) {
+              const welcomeMessage = document.createElement('div');
+              welcomeMessage.innerHTML = '<span class="text-yellow-300">System loaded successfully. Welcome to Liam Hellman\'s portfolio.</span>';
+              terminalOutput.appendChild(welcomeMessage);
+              terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+          }, 800);
+        }, delay * (mainSections.length + 1));
+      }
+    }
+  }, 100);
+});
+
+// Enhanced particles initialization with more dynamic settings
+document.addEventListener("DOMContentLoaded", function() {
+  // Enhanced particles configuration
+  if (typeof particlesJS !== 'undefined') {
+    // Check if particles.js is loaded before initializing
+    const enhancedParticleConfig = {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#48bb78"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          },
+          "polygon": {
+            "nb_sides": 5
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 2,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#48bb78",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2,
+          "direction": "none",
+          "random": true,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": true,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 140,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    };
+
+    // Override the default particles initialization to use enhanced settings
+    // But don't immediately initialize - wait for loading animation to complete
+    const originalParticlesLoad = window.particlesJS ? window.particlesJS.load : null;
+    if (originalParticlesLoad) {
+      window.particlesJS.load = function(selector, path, callback) {
+        // Just initialize with our custom config instead of loading from path
+        window.particlesJS(selector, enhancedParticleConfig);
+        if (callback) callback();
+      };
+    }
+  }
+});
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Script loaded and DOM ready.");
 
@@ -7,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebarToggle");
   const sidebarOverlay = document.getElementById("sidebarOverlay");
-
+  
   // Toggle sidebar
   sidebarToggle.addEventListener("click", function () {
     toggleSidebar();
@@ -50,7 +237,10 @@ document.addEventListener("DOMContentLoaded", function () {
       sidebar.classList.add("-translate-x-full");
       sidebarOverlay.classList.add("hidden");
       document.body.classList.remove("sidebar-open");
-      sidebarToggle.classList.remove("hidden"); // Show the toggle button when sidebar is closed
+      // Add a delay before showing the toggle button again
+      setTimeout(() => {
+        sidebarToggle.classList.remove("hidden");
+      }, 300); // Match this with the sidebar transition duration
     }
   }
 
@@ -60,20 +250,20 @@ document.addEventListener("DOMContentLoaded", function () {
     sidebar.classList.add("-translate-x-full");
     sidebarOverlay.classList.add("hidden");
     document.body.classList.remove("sidebar-open");
-    sidebarToggle.classList.remove("hidden"); // Show the toggle button when sidebar is closed
+    // Add a delay before showing the toggle button again
+    setTimeout(() => {
+      sidebarToggle.classList.remove("hidden");
+    }, 300); // Match this with the sidebar transition duration
   }
-
   // Translations and content
   const translations = {
     en: {
-      about: "About",
       education: "Education",
       experience: "Experience",
       projects: "Projects",
       contact: "Contact"
     },
     fr: {
-      about: "À propos",
       education: "Formation",
       experience: "Expérience",
       projects: "Projets",
@@ -313,12 +503,12 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   // Function to create bubbles for skills
-  function createBubbles(items) {
+  function createBubbles(items, colorClass) {
     const container = document.createElement("div");
     container.className = "flex flex-wrap gap-2 mt-2";
     items.forEach(item => {
       const span = document.createElement("span");
-      span.className = "px-3 py-1 bg-green-900 text-green-400 rounded-full text-sm font-medium";
+      span.className = `px-3 py-1 ${colorClass} rounded-full text-sm font-medium`;
       span.innerText = item;
       container.appendChild(span);
     });
@@ -451,61 +641,66 @@ document.addEventListener("DOMContentLoaded", function () {
       skillsSectionContainer.innerHTML = ""; // Clear existing content
       const skillsCard = document.createElement("div");
       skillsCard.className = "bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-green-400 hover:shadow-xl transition-shadow duration-300 p-6";
-
+  
       const skillsData = content[language].skills;
-
-      // Qualities
+  
+      // Qualities - green theme
       const qualitiesHeading = document.createElement("h3");
       qualitiesHeading.innerText = "Qualities:";
       qualitiesHeading.className = "text-xl font-bold text-green-400";
       skillsCard.appendChild(qualitiesHeading);
-      skillsCard.appendChild(createBubbles(skillsData.qualities));
-
-      // Languages
+      skillsCard.appendChild(createBubbles(skillsData.qualities, "bg-green-900 text-purple-100"));
+  
+      // Languages - blue theme
       const languagesHeading = document.createElement("h3");
       languagesHeading.innerText = "Languages:";
       languagesHeading.className = "text-xl font-bold text-green-400 mt-4";
       skillsCard.appendChild(languagesHeading);
-      skillsCard.appendChild(createBubbles(skillsData.languages));
-
-      // Interests
+      skillsCard.appendChild(createBubbles(skillsData.languages, "bg-blue-900 text-blue-100"));
+  
+      // Interests - cyan theme (fallback from teal)
       const interestsHeading = document.createElement("h3");
       interestsHeading.innerText = "Interests:";
       interestsHeading.className = "text-xl font-bold text-green-400 mt-4";
       skillsCard.appendChild(interestsHeading);
-      skillsCard.appendChild(createBubbles(skillsData.interests));
-
-      // Technical Skills
+      skillsCard.appendChild(createBubbles(skillsData.interests, "bg-blue-800 text-white"));
+  
+      // Technical Skills - heading
       const techHeading = document.createElement("h3");
       techHeading.innerText = "Technical Skills:";
       techHeading.className = "text-xl font-bold text-green-400 mt-4";
       skillsCard.appendChild(techHeading);
-
+  
       const technical = skillsData.technical;
+      
+      // Programming - red theme
       const programmingHeading = document.createElement("h4");
       programmingHeading.innerText = "Programming:";
       programmingHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(programmingHeading);
-      skillsCard.appendChild(createBubbles(technical.programming));
-
+      skillsCard.appendChild(createBubbles(technical.programming, "bg-red-900 text-red-100"));
+  
+      // Frameworks - indigo theme 
       const frameworksHeading = document.createElement("h4");
       frameworksHeading.innerText = "Frameworks:";
       frameworksHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(frameworksHeading);
-      skillsCard.appendChild(createBubbles(technical.frameworks));
-
+      skillsCard.appendChild(createBubbles(technical.frameworks, "bg-indigo-800 text-white"));
+  
+      // Tools - orange theme
       const toolsHeading = document.createElement("h4");
       toolsHeading.innerText = "Tools:";
       toolsHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(toolsHeading);
-      skillsCard.appendChild(createBubbles(technical.tools));
-
+      skillsCard.appendChild(createBubbles(technical.tools, "bg-yellow-900 text-indigo-100"));
+  
+      // Databases - pruple theme (fallback from emerald)
       const databasesHeading = document.createElement("h4");
       databasesHeading.innerText = "Databases:";
       databasesHeading.className = "text-lg font-bold text-green-400 mt-2";
       skillsCard.appendChild(databasesHeading);
-      skillsCard.appendChild(createBubbles(technical.databases));
-
+      skillsCard.appendChild(createBubbles(technical.databases, "bg-purple-800 text-white"));
+  
       skillsSectionContainer.appendChild(skillsCard);
     }
   }
@@ -525,7 +720,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function() {
   // Find the hero section and the place to embed the terminal
-  const heroSection = document.getElementById('about');
+  const heroSection = document.getElementById('terminal');
   if (!heroSection) return; // Exit if we're not on the homepage
   
   // Find the container where we'll embed the terminal
@@ -545,22 +740,22 @@ document.addEventListener("DOMContentLoaded", function() {
     // Create terminal container
     const terminal = document.createElement('div');
     terminal.id = 'embedded-terminal';
-    terminal.className = 'w-full mb-6 font-mono text-sm relative z-20';
+    terminal.className = 'w-full mb-6 font-mono text-base relative z-20'; // Changed text-sm to text-base
     
     // Create terminal header
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between p-2 bg-gray-800 border-t border-l border-r border-green-400 rounded-t-md';
+    header.className = 'flex items-center justify-between p-3 bg-gray-800 border-t border-l border-r border-green-400 rounded-t-md'; // Increased padding
     
     const title = document.createElement('div');
-    title.className = 'text-green-300 text-xs';
-    title.textContent = 'resume-terminal';
+    title.className = 'text-green-300 text-sm'; // Increased from text-xs
+    title.textContent = 'Resume Terminal';
     
     const controls = document.createElement('div');
-    controls.className = 'flex space-x-1';
+    controls.className = 'flex space-x-2'; // Increased spacing
     
     ['#FF5F56', '#FFBD2E', '#27C93F'].forEach(color => {
       const circle = document.createElement('div');
-      circle.className = 'w-2 h-2 rounded-full';
+      circle.className = 'w-3 h-3 rounded-full'; // Increased size
       circle.style.backgroundColor = color;
       controls.appendChild(circle);
     });
@@ -571,36 +766,40 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Create terminal body
     const body = document.createElement('div');
-    body.className = 'p-3 bg-black border-l border-r border-green-400';
+    body.className = 'p-4 bg-black border-l border-r border-green-400'; // Increased padding
+    body.style.minHeight = '300px'; // Ensure minimum height
     
     // Create terminal output
     const output = document.createElement('div');
     output.id = 'embedded-terminal-output';
-    output.className = 'text-green-400 mb-2 h-32 overflow-y-auto';
+    output.className = 'text-green-400 mb-3 overflow-y-auto'; // Increased margin
+    output.style.height = '250px'; // Fixed height
+    output.style.minHeight = '250px'; 
+    output.style.maxHeight = '250px';
     body.appendChild(output);
     
     // Create input area
     const inputContainer = document.createElement('div');
-    inputContainer.className = 'flex items-center';
+    inputContainer.className = 'flex items-center mt-2'; // Added margin top
     
     const prompt = document.createElement('span');
-    prompt.className = 'mr-1';
+    prompt.className = 'mr-2 text-base'; // Increased margin and font size
     prompt.innerHTML = '<span class="text-green-300">liam@portfolio</span>:<span class="text-blue-400">~</span>$ ';
     inputContainer.appendChild(prompt);
     
     const input = document.createElement('input');
     input.id = 'embedded-terminal-input';
-    input.className = 'flex-grow bg-transparent text-green-400 outline-none';
+    input.className = 'flex-grow bg-transparent text-green-400 outline-none text-base'; // Increased font size
     input.type = 'text';
     input.autocomplete = 'off';
-    input.placeholder = 'Type a command (try help)';
+    input.placeholder = 'ʕ•ᴥ•ʔ';
     inputContainer.appendChild(input);
     
     body.appendChild(inputContainer);
     
     // Create terminal footer
     const footer = document.createElement('div');
-    footer.className = 'p-1 text-right text-xs text-green-300 bg-gray-800 border-b border-l border-r border-green-400 rounded-b-md';
+    footer.className = 'p-2 text-right text-sm text-green-300 bg-gray-800 border-b border-l border-r border-green-400 rounded-b-md'; // Increased font size
     footer.textContent = 'Type "help" for commands';
     
     terminal.appendChild(header);
@@ -621,12 +820,12 @@ document.addEventListener("DOMContentLoaded", function() {
     let historyIndex = -1;
 
     // Show welcome message
-    addToTerminalOutput('<span class="text-yellow-300">Welcome to Liam Hellman\'s portfolio terminal!</span>');
+    addToTerminalOutput('');
     
     // Auto-execute intro command after a brief delay
-    setTimeout(() => {
-      executeCommand('cat introduction.txt');
-    }, 500);
+    //setTimeout(() => {
+    //  executeCommand('');
+    //}, 500);
 
     // Terminal input handling
     terminal.addEventListener('keydown', function(e) {
@@ -692,7 +891,7 @@ document.addEventListener("DOMContentLoaded", function() {
         case 'cd':
           if (args.length < 2) {
             addToTerminalOutput('Usage: goto [section]');
-            addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
+            addToTerminalOutput('Available sections: education, experience, projects, skills, contact');
           } else {
             navigateToSection(args[1]);
           }
@@ -700,31 +899,11 @@ document.addEventListener("DOMContentLoaded", function() {
         case 'ls':
           listSections();
           break;
-        case 'cat':
-          if (args.length < 2) {
-            addToTerminalOutput('Usage: cat [filename]');
-          } else if (args[1] === 'introduction.txt') {
-            showIntroduction();
-          } else {
-            addToTerminalOutput(`File not found: ${args[1]}`);
-          }
-          break;
         case 'whoami':
           addToTerminalOutput('visitor - You are browsing Liam Hellman\'s portfolio');
           break;
         case 'date':
           addToTerminalOutput(new Date().toString());
-          break;
-        case 'skills':
-          showSkills();
-          break;
-        case 'project':
-        case 'projects':
-          if (args.length < 2) {
-            listProjects();
-          } else {
-            showProject(args[1]);
-          }
           break;
         default:
           addToTerminalOutput(`Command not found: ${command}. Type 'help' for available commands.`);
@@ -748,24 +927,20 @@ document.addEventListener("DOMContentLoaded", function() {
       addToTerminalOutput('<span class="text-yellow-300">Available commands:</span>');
       addToTerminalOutput('  <span class="text-blue-400">help</span>           - Show this help message');
       addToTerminalOutput('  <span class="text-blue-400">clear, cls</span>     - Clear terminal output');
-      addToTerminalOutput('  <span class="text-blue-400">goto, cd</span>       - Navigate to a section (e.g., goto about)');
+      addToTerminalOutput('  <span class="text-blue-400">goto, cd</span>       - Navigate to a section (e.g., goto projects)');
       addToTerminalOutput('  <span class="text-blue-400">ls</span>             - List available sections');
-      addToTerminalOutput('  <span class="text-blue-400">cat</span>            - Display file contents (try: cat introduction.txt)');
       addToTerminalOutput('  <span class="text-blue-400">whoami</span>         - Display current user');
       addToTerminalOutput('  <span class="text-blue-400">date</span>           - Display current date and time');
-      addToTerminalOutput('  <span class="text-blue-400">skills</span>         - Show my skills');
-      addToTerminalOutput('  <span class="text-blue-400">projects</span>       - List all projects');
-      addToTerminalOutput('  <span class="text-blue-400">project [name]</span> - Show specific project details');
     }
 
     function listSections() {
       addToTerminalOutput('<span class="text-yellow-300">Available sections:</span>');
-      addToTerminalOutput('about       education   experience');
+      addToTerminalOutput('education   experience');
       addToTerminalOutput('projects    skills      contact');
     }
 
     function navigateToSection(section) {
-      const validSections = ['about', 'education', 'experience', 'projects', 'skills', 'contact'];
+      const validSections = ['education', 'experience', 'projects', 'skills', 'contact'];
       
       if (validSections.includes(section)) {
         if (section === 'contact') {
@@ -782,7 +957,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       } else {
         addToTerminalOutput(`Error: Section "${section}" not found.`);
-        addToTerminalOutput('Available sections: about, education, experience, projects, skills, contact');
+        addToTerminalOutput('Available sections: education, experience, projects, skills, contact');
       }
     }
 
@@ -799,77 +974,44 @@ document.addEventListener("DOMContentLoaded", function() {
       addToTerminalOutput('');
       addToTerminalOutput('Welcome to my interactive portfolio! Use the terminal to navigate through my experience and projects.');
     }
-
-    function showSkills() {
-      // Pull skill data from the content object
-      const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
-      const skillsData = window.content?.[language]?.skills;
-      
-      if (skillsData) {
-        addToTerminalOutput('<span class="text-yellow-300">Technical Skills:</span>');
-        addToTerminalOutput('<span class="text-blue-400">Programming:</span> ' + skillsData.technical.programming.join(', '));
-        addToTerminalOutput('<span class="text-blue-400">Frameworks:</span> ' + skillsData.technical.frameworks.join(', '));
-        addToTerminalOutput('<span class="text-blue-400">Tools:</span> ' + skillsData.technical.tools.join(', '));
-        addToTerminalOutput('<span class="text-blue-400">Databases:</span> ' + skillsData.technical.databases.join(', '));
-        
-        addToTerminalOutput('');
-        addToTerminalOutput('<span class="text-yellow-300">Languages:</span> ' + skillsData.languages.join(', '));
-        addToTerminalOutput('<span class="text-yellow-300">Key Qualities:</span> ' + skillsData.qualities.join(', '));
-      } else {
-        addToTerminalOutput('Skills data not available. Navigate to the Skills section for more information.');
-        addToTerminalOutput('Type: <span class="text-blue-400">goto skills</span>');
-      }
-    }
-
-    function listProjects() {
-      // Pull project data from the content object
-      const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
-      const projectsData = window.content?.[language]?.projects;
-      
-      if (projectsData) {
-        addToTerminalOutput('<span class="text-yellow-300">Projects:</span>');
-        projectsData.forEach((project, index) => {
-          addToTerminalOutput(`<span class="text-blue-400">${index + 1}. ${project.title}</span> - ${project.date}`);
-        });
-        addToTerminalOutput('');
-        addToTerminalOutput('For details on a specific project, type:');
-        addToTerminalOutput('<span class="text-blue-400">project [name]</span> (e.g., project roast-me)');
-      } else {
-        addToTerminalOutput('Projects data not available. Navigate to the Projects section for more information.');
-        addToTerminalOutput('Type: <span class="text-blue-400">goto projects</span>');
-      }
-    }
-
-    function showProject(projectName) {
-      // Pull project data from the content object
-      const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
-      const projectsData = window.content?.[language]?.projects;
-      
-      if (projectsData) {
-        const project = projectsData.find(p => p.title.toLowerCase().includes(projectName));
-        
-        if (project) {
-          addToTerminalOutput(`<span class="text-yellow-300">${project.title}</span> - ${project.date}`);
-          addToTerminalOutput(project.description);
-          addToTerminalOutput('');
-          addToTerminalOutput('<span class="text-blue-400">Technologies:</span> ' + project.technologies.join(', '));
-          addToTerminalOutput('');
-          addToTerminalOutput('<span class="text-blue-400">Key features:</span>');
-          project.points.forEach(point => {
-            addToTerminalOutput(`• ${point}`);
-          });
-        } else {
-          addToTerminalOutput(`Project "${projectName}" not found. Type <span class="text-blue-400">projects</span> to see all projects.`);
-        }
-      } else {
-        addToTerminalOutput('Projects data not available. Navigate to the Projects section for more information.');
-        addToTerminalOutput('Type: <span class="text-blue-400">goto projects</span>');
-      }
-    }
   }
 });
 
 
+window.addEventListener('resize', function() {
+  const terminal = document.getElementById('embedded-terminal');
+  const terminalOutput = document.getElementById('embedded-terminal-output');
+  
+  if (terminal && terminalOutput) {
+    // Apply fixed height to ensure consistency
+    terminalOutput.style.height = '250px';
+    terminalOutput.style.minHeight = '250px';
+    terminalOutput.style.maxHeight = '250px';
+    
+    // Adjust for mobile devices
+    if (window.innerWidth <= 640) {
+      terminalOutput.style.height = '200px';
+      terminalOutput.style.minHeight = '200px';
+      terminalOutput.style.maxHeight = '200px';
+    }
+  }
+});
+
+// Apply terminal size immediately on load
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a short time to ensure DOM is fully loaded
+  setTimeout(() => {
+    const terminalOutput = document.getElementById('embedded-terminal-output');
+    if (terminalOutput) {
+      // Set fixed height
+      terminalOutput.style.height = window.innerWidth <= 640 ? '200px' : '250px';
+      terminalOutput.style.minHeight = window.innerWidth <= 640 ? '200px' : '250px';
+      terminalOutput.style.maxHeight = window.innerWidth <= 640 ? '200px' : '250px';
+      
+      console.log('Terminal size applied successfully');
+    }
+  }, 500);
+});
 
 // Fix terminal clickability issues
 document.addEventListener('DOMContentLoaded', function() {

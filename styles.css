@@ -58,7 +58,7 @@ body.sidebar-open {
 }
 
 /* Ensure anchor scrolling leaves space for fixed nav */
-#about, #education, #experience, #projects, #skills {
+#terminal, #education, #experience, #projects, #skills {
   scroll-margin-top: 20px; /* Adjust as needed */
 }
 
@@ -266,27 +266,34 @@ html, body {
 }
 
 
-
-/* Embedded Terminal Styles */
-/* Add these styles to your style.css file */
-
 /* Embedded Terminal Styles */
 #embedded-terminal {
   width: 100%;
+  max-width: 700px; /* Set a maximum width */
+  min-height: 350px; /* Set a minimum height */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   cursor: text;
   position: relative;
   z-index: 20;
   pointer-events: auto !important;
+  margin: 0 auto; /* Center the terminal */
 }
 
 #embedded-terminal-output {
   scrollbar-width: thin;
   scrollbar-color: #48bb78 #1a202c;
-  height: 170px;
+  height: 250px; /* Increased fixed height */
+  min-height: 250px; /* Ensure minimum height */
+  max-height: 250px; /* Ensure maximum height */
   transition: height 0.3s ease;
+  overflow-y: auto;
 }
 
+#embedded-terminal > div:nth-child(2) {
+  min-height: 300px; /* Set minimum height for terminal body */
+}
+
+/* Rest of the terminal styles */
 #embedded-terminal-output::-webkit-scrollbar {
   width: 6px;
 }
@@ -300,9 +307,10 @@ html, body {
   border-radius: 10px;
 }
 
+#embedded-terminal span.mr-1,
 #embedded-terminal-input {
-  caret-color: #48bb78;
-  width: 100%;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 /* Terminal text typing animation */
@@ -351,8 +359,14 @@ html, body {
 
 /* Adjust for mobile */
 @media (max-width: 640px) {
+  #embedded-terminal {
+    min-height: 300px;
+  }
+  
   #embedded-terminal-output {
-    height: 130px;
+    height: 200px;
+    min-height: 200px;
+    max-height: 200px;
   }
 }
 
@@ -368,3 +382,4 @@ html, body {
   position: relative;
   z-index: 25;
 }
+

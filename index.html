@@ -11,6 +11,8 @@
     />
     <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="opening-animation.css">
+    <script src="opening-animation.js"></script>
   </head>
   <body class="min-h-screen bg-black font-mono text-green-400 relative z-10">
     <!-- Particles Background -->
@@ -20,7 +22,7 @@
     <div id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-gray-900 shadow-lg transform -translate-x-full transition-transform duration-300 z-50">
       <div class="flex flex-col p-4">
         <span class="text-xl font-bold text-green-400 mb-6">Liam Hellman</span>
-        <a href="#about" class="text-green-400 hover:text-green-200 mb-2">About</a>
+        <a href="#terminal" class="text-green-400 hover:text-green-200 mb-2">Terminal</a>
         <a href="#education" class="text-green-400 hover:text-green-200 mb-2">Education</a>
         <a href="#experience" class="text-green-400 hover:text-green-200 mb-2">Experience</a>
         <a href="#projects" class="text-green-400 hover:text-green-200 mb-2">Projects</a>
@@ -38,16 +40,9 @@
     <!-- Overlay for Sidebar -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
 
-    <!-- Hero Section (About) -->
-    <div id="about" class="bg-black pt-20 min-h-screen flex flex-col items-center justify-center fade-in-up delay-1">
-      <div class="max-w-2xl text-center p-8 border border-green-400 rounded-md">
-        <!-- Fake terminal prompt -->
-        <p class="text-sm mb-4">
-          <span class="text-green-300">C:\Users\Liam\resume&gt;</span> cat introduction.txt
-        </p>
-        <h1 id="heroName" class="text-4xl font-extrabold tracking-wide"></h1>
-        <p id="heroTitle" class="mt-4 text-2xl"></p>
-        <p id="heroLocation" class="mt-2 text-lg"></p>
+    <!-- Hero Section (terminal) -->
+    <div id="terminal" class="bg-black pt-200 min-h-screen flex flex-col items-center justify-center fade-in-up delay-1">
+      <div class="max-w-2xl text-center p-8">
       </div>
     </div>
 
@@ -88,5 +83,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <!-- Custom Script -->
     <script src="script.js"></script>
+    <script src="skills-colorizer.js"></script>
   </body>
 </html>
