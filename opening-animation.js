@@ -95,12 +95,12 @@ document.addEventListener("DOMContentLoaded", function() {
     // Loading animation text
     const textSequence = [
       { text: "Initializing system...", delay: 500 },
-      { text: "Running security checks...", delay: 800 },
-      { text: "Loading neural interface...", delay: 1000 },
-      { text: "Importing particle system...", delay: 800 },
+      { text: "Running security checks...", delay: 600 },
+      { text: "Loading neural interface...", delay: 400 },
+      { text: "Importing particle system...", delay: 350 },
       { text: "Connecting to network...", delay: 700 },
-      { text: "Preparing user experience...", delay: 900 },
-      { text: "Generating content...", delay: 800 },
+      { text: "Preparing user experience...", delay: 750 },
+      { text: "Generating content...", delay: 200 },
       { text: "Portfolio system ready!", delay: 500 }
     ];
     // Skip animation functionality
@@ -315,10 +315,6 @@ setTimeout(() => {
       
       // Add matrix rain effect to the overlay before fading out
       createMatrixRain(overlay);
-      
-      // Initialize particles
-      initializeParticles();
-      
       // Fade out and remove overlay
       await new Promise(resolve => setTimeout(resolve, 1000));
       overlay.style.opacity = '0';
