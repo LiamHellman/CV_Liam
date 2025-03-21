@@ -198,8 +198,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebarToggle");
   const sidebarOverlay = document.getElementById("sidebarOverlay");
-  
+  const langToggleSidebar = document.getElementById("langToggleSidebar");
   // Toggle sidebar
+
+  function updateLanguageToggleText() {
+    if (langToggleSidebar) {
+      langToggleSidebar.textContent = language === "en" ? "FR" : "EN";
+    }
+  }
+  updateLanguageToggleText();
   sidebarToggle.addEventListener("click", function () {
     toggleSidebar();
   });
@@ -220,6 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Language toggle for sidebar
   document.getElementById("langToggleSidebar").addEventListener("click", function () {
     language = language === "en" ? "fr" : "en";
+    updateLanguageToggleText();
     renderContent();
     closeSidebar(); // Close the sidebar when language is toggled
   });
@@ -260,13 +268,13 @@ document.addEventListener("DOMContentLoaded", function () {
       education: "Education",
       experience: "Experience",
       projects: "Projects",
-      contact: "Contact"
+      
     },
     fr: {
       education: "Formation",
       experience: "Expérience",
       projects: "Projets",
-      contact: "Contact"
+      
     }
   };
 
@@ -890,7 +898,7 @@ document.addEventListener("DOMContentLoaded", function() {
         case 'cd':
           if (args.length < 2) {
             addToTerminalOutput('Usage: goto [section]');
-            addToTerminalOutput('Available sections: education, experience, projects, skills, contact');
+            addToTerminalOutput('Available sections: education, experience, projects, skills');
           } else {
             navigateToSection(args[1]);
           }
@@ -935,16 +943,14 @@ document.addEventListener("DOMContentLoaded", function() {
     function listSections() {
       addToTerminalOutput('<span class="text-yellow-300">Available sections:</span>');
       addToTerminalOutput('education   experience');
-      addToTerminalOutput('projects    skills      contact');
+      addToTerminalOutput('projects    skills    ');
     }
 
     function navigateToSection(section) {
-      const validSections = ['education', 'experience', 'projects', 'skills', 'contact'];
+      const validSections = ['education', 'experience', 'projects', 'skills'];
       
       if (validSections.includes(section)) {
         if (section === 'contact') {
-          window.location.href = 'contact.html';
-          addToTerminalOutput(`Navigating to ${section}...`);
         } else {
           const element = document.getElementById(section);
           if (element) {
@@ -956,7 +962,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       } else {
         addToTerminalOutput(`Error: Section "${section}" not found.`);
-        addToTerminalOutput('Available sections: education, experience, projects, skills, contact');
+        addToTerminalOutput('Available sections: education, experience, projects, skills');
       }
     }
 
