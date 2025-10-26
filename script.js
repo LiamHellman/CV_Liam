@@ -878,6 +878,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }, true);
     });
 
+
     // Execute terminal commands
     function executeCommand(command) {
       const commandLower = command.toLowerCase();
@@ -912,10 +913,52 @@ document.addEventListener("DOMContentLoaded", function() {
         case 'date':
           addToTerminalOutput(new Date().toString());
           break;
+
+        case 'thankyoudad':
+          case 'dad':
+          showDadTribute();
+          break;
         default:
           addToTerminalOutput(`Command not found: ${command}. Type 'help' for available commands.`);
       }
     }
+
+    function showDadTribute() {
+      addToTerminalOutput('<span class="text-yellow-300">Launching tribute…</span>');
+      addToTerminalOutput('<span class="text-green-300">Happy Birthday, Dad ❤️</span>');
+
+      const overlay = document.createElement('div');
+      overlay.className = 'dad-tribute-overlay';
+
+      const modal = document.createElement('div');
+      modal.className = 'dad-tribute-modal';
+
+      modal.innerHTML = `
+        <h2 class="dad-tribute-title">Thank you, Dad</h2>
+        <p class="dad-tribute-message">
+          You’ve always been my role model — strong, kind, and endlessly patient. 
+          Every lesson and every laugh we’ve shared means the world to me. ❤️
+        </p>
+        <div class="dad-tribute-grid">
+          <img src="assets/dad/photo1.jpg" alt="Dad photo 1" />
+          <img src="assets/dad/photo2.jpg" alt="Dad photo 2" />
+          <img src="assets/dad/photo3.jpg" alt="Dad photo 3" />
+        </div>
+        <button class="dad-tribute-close">Close ✖</button>
+      `;
+
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+
+      // Close button / click anywhere
+      modal.querySelector('.dad-tribute-close').onclick = () => overlay.remove();
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  } 
+
+
+
+    
+
 
     // Terminal helper functions
     function addToTerminalOutput(text) {
