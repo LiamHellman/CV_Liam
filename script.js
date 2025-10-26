@@ -937,7 +937,8 @@ document.addEventListener("DOMContentLoaded", function() {
         '<span class="text-green-300"> Thank you for feeding my endless stomach :)</span>',
         '<span class="text-green-300"> There could never be enough thank yous for the best dad in the world</span>',
         '<span class="text-green-300"> Theres nothing I could give you to express how thankfull I am</span>',
-        '<span class="text-green-300"> Merci Papa (scroll down) </span>'
+        '<span class="text-green-300"> Merci Papa (scroll down) </span>',
+        '<span class="text-green-300"> <img src="assets/dad/photo2.jpg" alt="Dad photo 2" /> (scroll down) </span>'
       ];
       const delay = 3000;
 
