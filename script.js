@@ -924,35 +924,53 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function showDadTribute() {
-      addToTerminalOutput('<span class="text-yellow-300">Launching tribute…</span>');
-      addToTerminalOutput('<span class="text-green-300">Happy Birthday, Dad ❤️</span>');
+      const lines = [
+        '<span class="text-yellow-300">Launching tribute…</span>',
+        '<span class="text-green-300">❤️ Happy Birthday ❤️</span>',
+        '<span class="text-green-300"> What can you give someone who has amazon in their backpocket</span>',
+        '<span class="text-green-300"> Theres only something you make or something you cant purchase</span>',
+        '<span class="text-green-300"> So, I thought, why not mix both. Why not make this. </span>',
+        '<span class="text-green-300"> Youre the best father I could have ever asked for</span>',
+        '<span class="text-green-300"> Thank you for always being there for me. Thank you for the laughs</span>',
+        '<span class="text-green-300"> Thank you for the travelling, the talking, the teaching</span>',
+        '<span class="text-green-300"> Thank you for always pushing me always believing in me</span>',
+        '<span class="text-green-300"> Thank you for feeding my endless stomach :)</span>',
+        '<span class="text-green-300"> There could never be enough thank yous for the best dad in the world</span>',
+        '<span class="text-green-300"> Theres nothing I could give you to express how thankfull I am</span>',
+        '<span class="text-green-300"> Merci Papa (scroll down) </span>'
+      ];
+      const delay = 3000;
 
-      const overlay = document.createElement('div');
-      overlay.className = 'dad-tribute-overlay';
+      // Print lines sequentially with a consistent delay
+      lines.forEach((line, idx) => {
+        setTimeout(() => addToTerminalOutput(line), idx * delay);
+      });
 
-      const modal = document.createElement('div');
-      modal.className = 'dad-tribute-modal';
+      // Show modal after the messages have been printed
+      setTimeout(() => {
+        const overlay = document.createElement('div');
+        overlay.className = 'dad-tribute-overlay';
 
-      modal.innerHTML = `
-        <h2 class="dad-tribute-title">Thank you, Dad</h2>
-        <p class="dad-tribute-message">
-          You’ve always been my role model — strong, kind, and endlessly patient. 
-          Every lesson and every laugh we’ve shared means the world to me. ❤️
-        </p>
-        <div class="dad-tribute-grid">
-          <img src="assets/dad/photo1.jpg" alt="Dad photo 1" />
-          <img src="assets/dad/photo2.jpg" alt="Dad photo 2" />
-          <img src="assets/dad/photo3.jpg" alt="Dad photo 3" />
-        </div>
-        <button class="dad-tribute-close">Close ✖</button>
-      `;
+        const modal = document.createElement('div');
+        modal.className = 'dad-tribute-modal';
 
-      overlay.appendChild(modal);
-      document.body.appendChild(overlay);
+        modal.innerHTML = `
+          <h2 class="dad-tribute-title">Here's to many more memories</h2>
 
-      // Close button / click anywhere
-      modal.querySelector('.dad-tribute-close').onclick = () => overlay.remove();
-      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+          <div class="dad-tribute-grid">
+            <img src="assets/dad/photo1.jpg" alt="Dad photo 1" />
+            <img src="assets/dad/photo3.jpg" alt="Dad photo 3" />
+          </div>
+          <button class="dad-tribute-close">Close ✖</button>
+        `;
+
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        // Close button / click anywhere
+        modal.querySelector('.dad-tribute-close').onclick = () => overlay.remove();
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      }, lines.length * delay + 100);
   } 
 
 
